@@ -15,14 +15,14 @@ export default function TPILandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Nav */}
-      <nav className="container mx-auto px-4 py-6 flex justify-between items-center">
+      <nav className="container mx-auto px-4 py-6 flex justify-between items-center animate-fade-in">
         <div className="flex items-center gap-2">
-          <img src="/lobster-logo.png" alt="Lobster Energy" className="h-12" />
+          <img src="/lobster-logo.png" alt="Lobster Energy" className="h-12 animate-float" />
           <span className="text-xl font-bold text-white">Lobster Energy</span>
         </div>
         <div className="flex gap-4">
-          <Link href="/login" className="text-slate-300 hover:text-white px-4 py-2">Login</Link>
-          <Link href="/signup" className="bg-[#fb8a99] hover:bg-[#e87a89] text-white px-4 py-2 rounded-lg font-medium">
+          <Link href="/login" className="text-slate-300 hover:text-white px-4 py-2 transition-colors">Login</Link>
+          <Link href="/signup" className="bg-[#fb8a99] hover:bg-[#e87a89] text-white px-4 py-2 rounded-lg font-medium btn-shine transition-all hover:scale-105">
             Start Free Trial
           </Link>
         </div>
@@ -30,33 +30,33 @@ export default function TPILandingPage() {
 
       {/* Hero */}
       <section className="container mx-auto px-4 py-16 md:py-24 text-center">
-        <div className="inline-block px-4 py-1 bg-[#fb8a99]/20 text-[#fb8a99] rounded-full text-sm font-medium mb-6">
+        <div className="inline-block px-4 py-1 bg-[#fb8a99]/20 text-[#fb8a99] rounded-full text-sm font-medium mb-6 animate-fade-in-up opacity-0" style={{animationDelay: '0.1s', animationFillMode: 'forwards'}}>
           Built for Energy Brokers & TPIs
         </div>
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in-up opacity-0" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
           Win More Clients With<br />
-          <span className="text-[#fb8a99]">AI-Powered Market Intelligence</span>
+          <span className="gradient-text-shimmer">AI-Powered Market Intelligence</span>
         </h1>
-        <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+        <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto animate-fade-in-up opacity-0" style={{animationDelay: '0.3s', animationFillMode: 'forwards'}}>
           Stop guessing when to advise clients to buy. Get data-backed signals that 
           build trust, close deals, and keep clients coming back.
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up opacity-0" style={{animationDelay: '0.4s', animationFillMode: 'forwards'}}>
           <Link 
             href="/signup" 
-            className="bg-[#fb8a99] hover:bg-[#e87a89] text-white px-8 py-4 rounded-lg font-semibold text-lg"
+            className="bg-[#fb8a99] hover:bg-[#e87a89] text-white px-8 py-4 rounded-lg font-semibold text-lg btn-shine animate-pulse-glow transition-all hover:scale-105"
           >
             Start 14-Day Free Trial
           </Link>
           <a 
             href="#demo" 
-            className="bg-slate-700 hover:bg-slate-600 text-white px-8 py-4 rounded-lg font-semibold text-lg"
+            className="bg-slate-700 hover:bg-slate-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all hover:scale-105"
           >
             See How It Works
           </a>
         </div>
-        <p className="text-slate-500 mt-4 text-sm">No credit card required • Cancel anytime</p>
+        <p className="text-slate-500 mt-4 text-sm animate-fade-in opacity-0" style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>No credit card required • Cancel anytime</p>
       </section>
 
       {/* Pain Points */}
@@ -68,17 +68,17 @@ export default function TPILandingPage() {
           Every energy broker faces these challenges
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6">
+          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6 card-hover">
             <div className="text-3xl mb-3">😰</div>
             <h3 className="text-lg font-semibold text-white mb-2">"Should we buy now?"</h3>
             <p className="text-slate-400 text-sm">Clients ask for timing advice but you're guessing based on gut feel and yesterday's news.</p>
           </div>
-          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6">
+          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6 card-hover">
             <div className="text-3xl mb-3">🏃</div>
             <h3 className="text-lg font-semibold text-white mb-2">Competing on price alone</h3>
             <p className="text-slate-400 text-sm">Every broker has the same suppliers. Hard to differentiate when you're all quoting the same rates.</p>
           </div>
-          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6">
+          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6 card-hover">
             <div className="text-3xl mb-3">👋</div>
             <h3 className="text-lg font-semibold text-white mb-2">Clients shop around</h3>
             <p className="text-slate-400 text-sm">You place a contract, then don't hear from them for 2 years until renewal. No ongoing relationship.</p>
@@ -96,9 +96,9 @@ export default function TPILandingPage() {
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 card-hover group">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span className="text-2xl">🎯</span>
               </div>
               <h3 className="text-xl font-semibold text-white">Real-Time Trading Signals</h3>
@@ -112,9 +112,9 @@ export default function TPILandingPage() {
             </div>
           </div>
 
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 card-hover group">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span className="text-2xl">📈</span>
               </div>
               <h3 className="text-xl font-semibold text-white">Price Forecasts</h3>
@@ -128,9 +128,9 @@ export default function TPILandingPage() {
             </div>
           </div>
 
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 card-hover group">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span className="text-2xl">📊</span>
               </div>
               <h3 className="text-xl font-semibold text-white">Backtest Results</h3>
@@ -144,9 +144,9 @@ export default function TPILandingPage() {
             </div>
           </div>
 
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 card-hover group">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span className="text-2xl">🌤️</span>
               </div>
               <h3 className="text-xl font-semibold text-white">Weather Impact Analysis</h3>
@@ -164,21 +164,22 @@ export default function TPILandingPage() {
 
       {/* Social Proof / Results */}
       <section className="container mx-auto px-4 py-16">
-        <div className="bg-gradient-to-r from-[#fb8a99]/20 to-[#fb8a99]/20 border border-[#fb8a99]/30 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
+        <div className="bg-gradient-to-r from-[#fb8a99]/20 via-purple-500/10 to-[#fb8a99]/20 border border-[#fb8a99]/30 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 animate-pulse"></div>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 relative">
             The Numbers Don't Lie
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#fb8a99] mb-2">4%</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            <div className="group">
+              <div className="text-4xl md:text-5xl font-bold gradient-text mb-2 group-hover:scale-110 transition-transform">4%</div>
               <div className="text-slate-300">Average savings vs. buying blind</div>
             </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#fb8a99] mb-2">£33k</div>
+            <div className="group">
+              <div className="text-4xl md:text-5xl font-bold gradient-text mb-2 group-hover:scale-110 transition-transform">£33k</div>
               <div className="text-slate-300">Annual savings per 1MW client</div>
             </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#fb8a99] mb-2">24/7</div>
+            <div className="group">
+              <div className="text-4xl md:text-5xl font-bold gradient-text mb-2 group-hover:scale-110 transition-transform">24/7</div>
               <div className="text-slate-300">Real-time BMRS market data</div>
             </div>
           </div>
@@ -231,49 +232,52 @@ export default function TPILandingPage() {
         </p>
         
         <div className="max-w-md mx-auto">
-          <div className="bg-gradient-to-b from-[#fb8a99]/10 to-slate-800/50 rounded-2xl p-8 border-2 border-[#fb8a99]/50">
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
-              <div className="flex items-baseline justify-center gap-1">
-                <span className="text-5xl font-bold text-white">£149</span>
-                <span className="text-slate-400">/month</span>
+          <div className="bg-gradient-to-b from-[#fb8a99]/10 to-slate-800/50 rounded-2xl p-8 border-2 border-[#fb8a99]/50 card-hover relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#fb8a99]/10 rounded-full blur-3xl"></div>
+            <div className="relative">
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
+                <div className="flex items-baseline justify-center gap-1">
+                  <span className="text-5xl font-bold gradient-text">£149</span>
+                  <span className="text-slate-400">/month</span>
+                </div>
+                <p className="text-green-400 text-sm mt-2">14-day free trial included</p>
               </div>
-              <p className="text-green-400 text-sm mt-2">14-day free trial included</p>
-            </div>
-            
-            <ul className="space-y-3 mb-8">
-              <li className="flex items-center gap-3 text-slate-300">
-                <span className="text-green-400">✓</span> Real-time trading signals
-              </li>
-              <li className="flex items-center gap-3 text-slate-300">
-                <span className="text-green-400">✓</span> Price forecasts (7-90 days)
-              </li>
-              <li className="flex items-center gap-3 text-slate-300">
-                <span className="text-green-400">✓</span> Backtest analysis
-              </li>
-              <li className="flex items-center gap-3 text-slate-300">
-                <span className="text-green-400">✓</span> Weather impact data
-              </li>
-              <li className="flex items-center gap-3 text-slate-300">
-                <span className="text-green-400">✓</span> Demand forecasting
-              </li>
-              <li className="flex items-center gap-3 text-slate-300">
-                <span className="text-green-400">✓</span> Contract comparison tools
-              </li>
-              <li className="flex items-center gap-3 text-slate-300">
-                <span className="text-green-400">✓</span> Email support
-              </li>
-            </ul>
+              
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-3 text-slate-300">
+                  <span className="text-green-400">✓</span> Real-time trading signals
+                </li>
+                <li className="flex items-center gap-3 text-slate-300">
+                  <span className="text-green-400">✓</span> Price forecasts (7-90 days)
+                </li>
+                <li className="flex items-center gap-3 text-slate-300">
+                  <span className="text-green-400">✓</span> Backtest analysis
+                </li>
+                <li className="flex items-center gap-3 text-slate-300">
+                  <span className="text-green-400">✓</span> Weather impact data
+                </li>
+                <li className="flex items-center gap-3 text-slate-300">
+                  <span className="text-green-400">✓</span> Demand forecasting
+                </li>
+                <li className="flex items-center gap-3 text-slate-300">
+                  <span className="text-green-400">✓</span> Contract comparison tools
+                </li>
+                <li className="flex items-center gap-3 text-slate-300">
+                  <span className="text-green-400">✓</span> Email support
+                </li>
+              </ul>
 
-            <Link
-              href="/signup"
-              className="block w-full py-4 text-center bg-[#fb8a99] hover:bg-[#e87a89] text-white font-semibold rounded-lg text-lg transition-colors"
-            >
-              Start Free Trial
-            </Link>
-            <p className="text-center text-slate-500 text-sm mt-4">
-              No credit card required
-            </p>
+              <Link
+                href="/signup"
+                className="block w-full py-4 text-center bg-[#fb8a99] hover:bg-[#e87a89] text-white font-semibold rounded-lg text-lg btn-shine transition-all hover:scale-105"
+              >
+                Start Free Trial
+              </Link>
+              <p className="text-center text-slate-500 text-sm mt-4">
+                No credit card required
+              </p>
+            </div>
           </div>
         </div>
 
@@ -323,22 +327,25 @@ export default function TPILandingPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Ready to win more clients?
-        </h2>
-        <p className="text-slate-400 mb-8 text-lg">
-          Join smart energy brokers using data to stand out from the competition.
-        </p>
-        <Link 
-          href="/signup" 
-          className="inline-block bg-[#fb8a99] hover:bg-[#e87a89] text-white px-8 py-4 rounded-lg font-semibold text-lg"
-        >
-          Start Your Free Trial
-        </Link>
-        <p className="text-slate-500 mt-4 text-sm">
-          14 days free • No credit card required • Cancel anytime
-        </p>
+      <section className="container mx-auto px-4 py-20 text-center relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#fb8a99]/5 via-purple-500/5 to-[#fb8a99]/5 rounded-3xl"></div>
+        <div className="relative">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready to <span className="gradient-text">win more clients</span>?
+          </h2>
+          <p className="text-slate-400 mb-8 text-lg">
+            Join smart energy brokers using data to stand out from the competition.
+          </p>
+          <Link 
+            href="/signup" 
+            className="inline-block bg-[#fb8a99] hover:bg-[#e87a89] text-white px-8 py-4 rounded-lg font-semibold text-lg btn-shine animate-pulse-glow transition-all hover:scale-105"
+          >
+            Start Your Free Trial
+          </Link>
+          <p className="text-slate-500 mt-4 text-sm">
+            14 days free • No credit card required • Cancel anytime
+          </p>
+        </div>
       </section>
 
       {/* Footer */}
