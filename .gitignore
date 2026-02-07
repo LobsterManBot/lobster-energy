@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Build outputs
+.next/
+.vercel/
+dist/
+
+# Database
+*.db
+*.sqlite
+
+# Environment
+.env
+.env.local
+
+# Models
+saved_models/
+
+# IDE
+.idea/
+.vscode/
+*.swp

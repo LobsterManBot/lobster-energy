@@ -8,39 +8,49 @@ from datetime import datetime, timedelta
 import asyncio
 
 from services.database import SessionLocal, MarketPrice, init_db
-from services.nordpool import NordpoolClient, BMRSClient
+from services.data_fetcher import BMRSClient
 
 scheduler = AsyncIOScheduler()
 
 
 async def fetch_live_prices():
-    """Fetch current prices from all sources"""
+    """Fetch current prices from BMRS"""
     print(f"[{datetime.now()}] Fetching live prices...")
     
     db = SessionLocal()
+    client = BMRSClient()
+    
     try:
-        # Nordpool UK Day-ahead
-        nordpool = NordpoolClient()
-        try:
-            prices = await nordpool.get_current_prices()
+        price_data = await client.get_current_price()
+        
+        if price_data and price_data.get("uk_dayahead"):
+            price = MarketPrice(
+                timestamp=datetime.fromisoformat(price_data["timestamp"].replace("Z", "+00:00")),
+                market="uk_dayahead",
+                price=price_data["uk_dayahead"],
+                unit="GBP/MWh",
+                source="bmrs"
+            )
             
-            if prices:
-                price = MarketPrice(
-                    timestamp=datetime.utcnow(),
-                    market='uk_dayahead',
-                    price=prices.get('uk_dayahead', 0),
-                    unit='GBP/MWh',
-                    source='nordpool'
-                )
+            # Check if we already have this timestamp
+            existing = db.query(MarketPrice).filter(
+                MarketPrice.timestamp == price.timestamp,
+                MarketPrice.market == "uk_dayahead"
+            ).first()
+            
+            if not existing:
                 db.add(price)
                 db.commit()
-                print(f"  UK Day-ahead: {prices.get('uk_dayahead')} GBP/MWh")
-        finally:
-            await nordpool.close()
-        
+                print(f"  UK Day-ahead: £{price_data['uk_dayahead']}/MWh")
+            else:
+                print(f"  Price already exists for {price.timestamp}")
+        else:
+            print("  No price data available")
+            
     except Exception as e:
         print(f"  Error fetching prices: {e}")
     finally:
+        await client.close()
         db.close()
 
 
@@ -48,27 +58,26 @@ async def update_predictions():
     """Regenerate predictions based on latest data"""
     print(f"[{datetime.now()}] Updating predictions...")
     
-    # This would be called less frequently (e.g., every 6 hours)
-    # Import here to avoid circular imports
     from models.predictor import EnergyPredictor
+    import pandas as pd
     
     db = SessionLocal()
     try:
         predictor = EnergyPredictor()
         
-        for market in ['uk_dayahead', 'uk_peak', 'gas_nbp']:
+        for market in ["uk_dayahead"]:
             prices = db.query(MarketPrice).filter(
                 MarketPrice.market == market
             ).order_by(MarketPrice.timestamp.asc()).all()
             
             if len(prices) > 1000:
-                import pandas as pd
                 df = pd.DataFrame([
                     {"timestamp": p.timestamp, "price": p.price, "market": p.market}
                     for p in prices
                 ])
                 
                 if not predictor.is_trained:
+                    print(f"  Training model on {len(df)} records...")
                     predictor.train(df)
                 
                 print(f"  Updated predictions for {market}")
@@ -78,52 +87,67 @@ async def update_predictions():
         db.close()
 
 
-async def fetch_historical_backfill():
-    """Backfill historical data if needed"""
+async def backfill_historical():
+    """Backfill historical data from BMRS"""
     print(f"[{datetime.now()}] Checking for historical data gaps...")
     
     db = SessionLocal()
+    client = BMRSClient()
+    
     try:
-        # Check if we have enough data
+        # Check current data count
         count = db.query(MarketPrice).filter(
-            MarketPrice.market == 'uk_dayahead'
+            MarketPrice.market == "uk_dayahead"
         ).count()
         
-        if count < 43800:  # ~5 years of hourly data
-            print(f"  Need backfill: have {count} records, need ~43800")
+        # Target: 5 years of half-hourly data = ~87,600 records
+        target = 87600
+        
+        if count < target * 0.9:  # Less than 90% of target
+            print(f"  Have {count} records, need ~{target}. Starting backfill...")
             
-            nordpool = NordpoolClient()
-            try:
+            # Find oldest record
+            oldest = db.query(MarketPrice).filter(
+                MarketPrice.market == "uk_dayahead"
+            ).order_by(MarketPrice.timestamp.asc()).first()
+            
+            if oldest:
+                end_date = oldest.timestamp
+            else:
                 end_date = datetime.now()
-                start_date = end_date - timedelta(days=365 * 5)
+            
+            # Fetch in chunks (BMRS has rate limits)
+            start_date = end_date - timedelta(days=365)  # 1 year at a time
+            
+            df = await client.fetch_market_prices(start_date, end_date)
+            
+            added = 0
+            for _, row in df.iterrows():
+                existing = db.query(MarketPrice).filter(
+                    MarketPrice.timestamp == row["timestamp"],
+                    MarketPrice.market == row["market"]
+                ).first()
                 
-                df = await nordpool.fetch_dayahead_prices(start_date, end_date)
-                
-                added = 0
-                for _, row in df.iterrows():
-                    existing = db.query(MarketPrice).filter(
-                        MarketPrice.timestamp == row['timestamp'],
-                        MarketPrice.market == row['market']
-                    ).first()
-                    
-                    if not existing:
-                        price = MarketPrice(
-                            timestamp=row['timestamp'],
-                            market=row['market'],
-                            price=row['price'],
-                            unit='GBP/MWh',
-                            source='nordpool'
-                        )
-                        db.add(price)
-                        added += 1
-                
-                db.commit()
-                print(f"  Added {added} historical records")
-            finally:
-                await nordpool.close()
+                if not existing and row["price"] > 0:
+                    price = MarketPrice(
+                        timestamp=row["timestamp"],
+                        market=row["market"],
+                        price=row["price"],
+                        unit=row["unit"],
+                        source=row["source"]
+                    )
+                    db.add(price)
+                    added += 1
+            
+            db.commit()
+            print(f"  Added {added} historical records")
+        else:
+            print(f"  Historical data OK: {count} records")
+            
     except Exception as e:
         print(f"  Backfill error: {e}")
     finally:
+        await client.close()
         db.close()
 
 
@@ -137,7 +161,7 @@ def start_scheduler():
     scheduler.add_job(
         fetch_live_prices,
         IntervalTrigger(minutes=15),
-        id='fetch_live_prices',
+        id="fetch_live_prices",
         replace_existing=True
     )
     
@@ -145,22 +169,22 @@ def start_scheduler():
     scheduler.add_job(
         update_predictions,
         IntervalTrigger(hours=6),
-        id='update_predictions',
+        id="update_predictions",
         replace_existing=True
     )
     
-    # Check for backfill on startup and daily at 3 AM
+    # Backfill check daily at 3 AM
     scheduler.add_job(
-        fetch_historical_backfill,
+        backfill_historical,
         CronTrigger(hour=3, minute=0),
-        id='backfill_check',
+        id="backfill_check",
         replace_existing=True
     )
     
-    # Run initial fetch
+    # Run initial fetch on startup
     scheduler.add_job(
-        fetch_historical_backfill,
-        id='initial_backfill',
+        fetch_live_prices,
+        id="initial_fetch",
         replace_existing=True
     )
     

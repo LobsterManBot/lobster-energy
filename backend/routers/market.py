@@ -8,7 +8,7 @@ from typing import Optional, List
 import pandas as pd
 
 from services.database import get_db, MarketPrice
-from services.nordpool import NordpoolClient, BMRSClient
+from services.data_fetcher import BMRSClient
 
 router = APIRouter()
 
@@ -51,9 +51,9 @@ async def get_prices(
 async def get_current_prices():
     """Get current/latest prices for all markets"""
     
-    client = NordpoolClient()
+    client = BMRSClient()
     try:
-        prices = await client.get_current_prices()
+        prices = await client.get_current_price()
         return {
             "timestamp": datetime.utcnow().isoformat(),
             "prices": prices
@@ -152,9 +152,9 @@ async def fetch_historical_data(
     end_date = datetime.now()
     start_date = end_date - timedelta(days=years * 365)
     
-    client = NordpoolClient()
+    client = BMRSClient()
     try:
-        df = await client.fetch_dayahead_prices(start_date, end_date)
+        df = await client.fetch_market_prices(start_date, end_date)
         
         # Store in database
         count = 0
@@ -164,13 +164,13 @@ async def fetch_historical_data(
                 MarketPrice.market == row['market']
             ).first()
             
-            if not existing:
+            if not existing and row['price'] > 0:
                 price = MarketPrice(
                     timestamp=row['timestamp'],
                     market=row['market'],
                     price=row['price'],
                     unit=row.get('unit', 'GBP/MWh'),
-                    source='nordpool'
+                    source='bmrs'
                 )
                 db.add(price)
                 count += 1

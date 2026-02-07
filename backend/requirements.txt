@@ -4,10 +4,7 @@ pandas==2.2.0
 numpy==1.26.3
 scikit-learn==1.4.0
 xgboost==2.0.3
-prophet==1.1.5
 httpx==0.26.0
-beautifulsoup4==4.12.3
 sqlalchemy==2.0.25
 python-dotenv==1.0.0
 apscheduler==3.10.4
-requests==2.31.0
