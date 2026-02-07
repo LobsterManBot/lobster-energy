@@ -1,0 +1,99 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+
+const navItems = [
+  { href: '/dashboard', label: 'Dashboard', icon: '📊' },
+  { href: '/signals', label: 'Signals', icon: '🎯' },
+  { href: '/forecast', label: 'Forecast', icon: '📈' },
+  { href: '/backtest', label: 'Backtest', icon: '📉' },
+  { href: '/weather', label: 'Weather', icon: '🌤️' },
+  { href: '/demand', label: 'Demand', icon: '⚡' },
+  { href: '/compare', label: 'Compare', icon: '⚖️' },
+]
+
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+  }, [])
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur border-b border-slate-700">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <img src="/lobster-logo.png" alt="Lobster Energy" className="h-10" />
+              <span className="text-lg font-bold text-white hidden sm:block">Lobster Energy</span>
+            </Link>
+            
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === item.href
+                      ? 'bg-red-500/20 text-red-400'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="text-sm text-slate-300 hover:text-white"
+              >
+                Account
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="text-sm text-red-400 hover:text-red-300"
+              >
+                Sign in
+              </Link>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 py-6 pb-24 md:pb-8">
+        {children}
+      </main>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-t border-slate-700 z-50">
+        <div className="grid grid-cols-5 gap-1 p-2">
+          {navItems.slice(0, 5).map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex flex-col items-center py-2 px-1 rounded-lg ${
+                pathname === item.href
+                  ? 'bg-red-500/20 text-red-400'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span className="text-lg">{item.icon}</span>
+              <span className="text-[10px] mt-1">{item.label}</span>
+            </Link>
+          ))}
+        </div>
+      </nav>
+    </div>
+  )
+}

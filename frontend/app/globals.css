@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 249, 250, 251;
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 15, 23, 42;
 }
 
 body {
@@ -12,39 +12,21 @@ body {
   background: rgb(var(--background-rgb));
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - dark theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #1e293b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #475569;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-/* Signal colors */
-.signal-buy {
-  @apply bg-green-100 text-green-800 border-green-300;
-}
-
-.signal-wait {
-  @apply bg-yellow-100 text-yellow-800 border-yellow-300;
-}
-
-.signal-hold {
-  @apply bg-gray-100 text-gray-800 border-gray-300;
-}
-
-/* Card hover effect */
-.card-hover {
-  @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5;
+  background: #64748b;
 }

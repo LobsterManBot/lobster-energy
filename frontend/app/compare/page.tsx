@@ -1,303 +1,184 @@
 'use client';
 
-import { useState } from 'react';
-import { CheckCircle, XCircle, AlertCircle, Calculator } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import AppLayout from '@/components/AppLayout';
 
-interface ComparisonResult {
-  recommendation: string;
-  confidence: number;
-  reason: string;
-  fixed_rate: number;
-  fixed_annual_cost: number;
-  flexible_expected: number;
-  flexible_expected_annual: number;
-  flexible_best_case: number;
-  flexible_worst_case: number;
-  savings_potential_pct: number;
-  risk_pct: number;
-  contract_years: number;
-  annual_volume_mwh: number;
+interface SignalData {
+  priceContext: { current: number; avg30d: number; avg90d: number; percentile: number };
+  contractComparison: { fixedRate: number; flexibleEstimate: number };
 }
 
 export default function ComparePage() {
-  const [fixedRate, setFixedRate] = useState(85);
-  const [annualVolume, setAnnualVolume] = useState(10000);
-  const [contractYears, setContractYears] = useState(1);
-  const [market, setMarket] = useState('uk_dayahead');
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<ComparisonResult | null>(null);
+  const [data, setData] = useState<SignalData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [annualMWh, setAnnualMWh] = useState(8760);
 
-  async function runComparison() {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams({
-        fixed_rate: fixedRate.toString(),
-        annual_volume: annualVolume.toString(),
-        contract_years: contractYears.toString(),
-        market: market,
-      });
-      
-      const res = await fetch(`/api/predictions/compare-contracts?${params}`);
-      if (res.ok) {
-        const json = await res.json();
-        setResult(json);
-      }
-    } catch (e) {
-      console.error('Comparison failed:', e);
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    fetch('/api/signals').then(res => res.json()).then(setData).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <AppLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
+        </div>
+      </AppLayout>
+    );
   }
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-GB', {
-      style: 'currency',
-      currency: 'GBP',
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
+  if (!data) {
+    return (
+      <AppLayout>
+        <div className="text-red-400 p-4 bg-red-500/20 rounded-xl">Unable to load data</div>
+      </AppLayout>
+    );
+  }
+
+  const fixedCost = data.contractComparison.fixedRate * annualMWh;
+  const flexibleCost = data.contractComparison.flexibleEstimate * annualMWh;
+  const difference = fixedCost - flexibleCost;
+  const percentDiff = ((difference / flexibleCost) * 100).toFixed(1);
+
+  const scenarios = [
+    { name: 'Prices drop 15%', flexMultiplier: 0.85 },
+    { name: 'Prices stable', flexMultiplier: 1.0 },
+    { name: 'Prices rise 15%', flexMultiplier: 1.15 },
+    { name: 'Prices spike 30%', flexMultiplier: 1.30 },
+  ];
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Fixed vs Flexible Analysis</h1>
-        <p className="text-gray-500 mt-1">
-          Compare contract options based on AI predictions
-        </p>
-      </div>
+    <AppLayout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-white">⚖️ Contract Comparison</h1>
+          <p className="text-slate-400 text-sm mt-1">Fixed vs Flexible energy contract analysis</p>
+        </div>
 
-      {/* Input Form */}
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Contract Details</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Fixed Rate Offer (£/MWh)
-            </label>
-            <input
-              type="number"
-              value={fixedRate}
-              onChange={(e) => setFixedRate(Number(e.target.value))}
-              className="w-full border rounded-lg px-4 py-2"
-              min={0}
-              step={0.5}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Annual Volume (MWh)
-            </label>
-            <input
-              type="number"
-              value={annualVolume}
-              onChange={(e) => setAnnualVolume(Number(e.target.value))}
-              className="w-full border rounded-lg px-4 py-2"
-              min={0}
-              step={100}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Contract Duration
-            </label>
-            <select
-              value={contractYears}
-              onChange={(e) => setContractYears(Number(e.target.value))}
-              className="w-full border rounded-lg px-4 py-2"
-            >
-              <option value={1}>1 Year</option>
-              <option value={2}>2 Years</option>
-              <option value={3}>3 Years</option>
-            </select>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Market
-            </label>
-            <select
-              value={market}
-              onChange={(e) => setMarket(e.target.value)}
-              className="w-full border rounded-lg px-4 py-2"
-            >
-              <option value="uk_dayahead">UK Day-Ahead</option>
-              <option value="uk_peak">UK Peak</option>
-              <option value="gas_nbp">UK NBP Gas</option>
-            </select>
+        {/* Usage Input */}
+        <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-4">
+          <h2 className="font-semibold text-white mb-3">📊 Your Usage</h2>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex-1 w-full">
+              <input
+                type="number"
+                value={annualMWh}
+                onChange={(e) => setAnnualMWh(parseInt(e.target.value) || 0)}
+                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                placeholder="Annual MWh"
+              />
+            </div>
+            <div className="flex gap-2">
+              {[{ label: '1 MW', value: 8760 }, { label: '5 MW', value: 43800 }, { label: '10 MW', value: 87600 }].map((preset) => (
+                <button
+                  key={preset.value}
+                  onClick={() => setAnnualMWh(preset.value)}
+                  className="px-3 py-2 text-sm bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600"
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        <button
-          onClick={runComparison}
-          disabled={loading}
-          className="mt-6 px-6 py-3 bg-lobster-600 text-white rounded-lg font-medium hover:bg-lobster-700 disabled:opacity-50 flex items-center gap-2"
-        >
-          <Calculator className="w-5 h-5" />
-          {loading ? 'Analyzing...' : 'Compare Options'}
-        </button>
+        {/* Main Comparison */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl">🔒</span>
+              <h2 className="font-semibold text-white">Fixed Contract</h2>
+            </div>
+            <div className="text-3xl font-bold text-white mb-2">
+              £{(fixedCost / 1000).toFixed(0)}k<span className="text-lg font-normal text-slate-400">/year</span>
+            </div>
+            <div className="text-slate-400 mb-4">at £{data.contractComparison.fixedRate.toFixed(2)}/MWh</div>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2 text-green-400"><span>✓</span> Price certainty</div>
+              <div className="flex items-center gap-2 text-green-400"><span>✓</span> Spike protection</div>
+              <div className="flex items-center gap-2 text-yellow-400"><span>⚠</span> ~8% premium</div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl">📈</span>
+              <h2 className="font-semibold text-white">Flexible Contract</h2>
+            </div>
+            <div className="text-3xl font-bold text-white mb-2">
+              £{(flexibleCost / 1000).toFixed(0)}k<span className="text-lg font-normal text-slate-400">/year*</span>
+            </div>
+            <div className="text-slate-400 mb-4">at £{data.contractComparison.flexibleEstimate.toFixed(2)}/MWh (est.)</div>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2 text-green-400"><span>✓</span> Benefit from drops</div>
+              <div className="flex items-center gap-2 text-green-400"><span>✓</span> Lower avg cost</div>
+              <div className="flex items-center gap-2 text-red-400"><span>✗</span> Spike exposure</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Difference */}
+        <div className={`rounded-xl border-2 p-5 text-center ${
+          difference > 0 ? 'bg-yellow-500/20 border-yellow-500/50' : 'bg-green-500/20 border-green-500/50'
+        }`}>
+          <div className="text-slate-300 mb-1">
+            {difference > 0 ? 'Fixed costs more by' : 'Fixed saves you'}
+          </div>
+          <div className={`text-4xl font-bold ${difference > 0 ? 'text-yellow-400' : 'text-green-400'}`}>
+            £{Math.abs(difference / 1000).toFixed(0)}k/year
+          </div>
+          <div className="text-slate-400 text-sm mt-1">
+            ({difference > 0 ? '+' : ''}{percentDiff}% vs flexible)
+          </div>
+        </div>
+
+        {/* Scenario Analysis */}
+        <div className="bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden">
+          <div className="p-4 border-b border-slate-700">
+            <h2 className="font-semibold text-white">🎯 Scenario Analysis</h2>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-slate-700/50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-slate-400">Scenario</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-slate-400">Fixed</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-slate-400">Flexible</th>
+                  <th className="px-4 py-3 text-right text-sm font-medium text-slate-400">Winner</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-700">
+                {scenarios.map((scenario) => {
+                  const scenarioFlex = flexibleCost * scenario.flexMultiplier;
+                  const diff = fixedCost - scenarioFlex;
+                  const winner = diff > 0 ? 'Flexible' : 'Fixed';
+                  return (
+                    <tr key={scenario.name} className="hover:bg-slate-700/30">
+                      <td className="px-4 py-3 text-sm text-white">{scenario.name}</td>
+                      <td className="px-4 py-3 text-right text-sm text-slate-300">£{(fixedCost / 1000).toFixed(0)}k</td>
+                      <td className="px-4 py-3 text-right text-sm text-slate-300">£{(scenarioFlex / 1000).toFixed(0)}k</td>
+                      <td className="px-4 py-3 text-right">
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                          winner === 'Fixed' ? 'bg-blue-500/20 text-blue-400' : 'bg-green-500/20 text-green-400'
+                        }`}>{winner}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Recommendation */}
+        <div className="bg-slate-800/30 rounded-xl border border-slate-700 p-4">
+          <h3 className="font-semibold text-white mb-2">💡 Tranche Strategy</h3>
+          <p className="text-sm text-slate-400">
+            Consider a <strong className="text-white">tranche buying strategy</strong>: purchase in portions 
+            (e.g., 25% at a time) when prices are favorable. Use our signals page to time purchases.
+          </p>
+        </div>
       </div>
-
-      {/* Results */}
-      {result && (
-        <>
-          {/* Recommendation Banner */}
-          <div className={`rounded-xl p-6 ${
-            result.recommendation === 'FLEXIBLE' 
-              ? 'bg-green-50 border-2 border-green-200'
-              : result.recommendation === 'FIXED'
-              ? 'bg-blue-50 border-2 border-blue-200'
-              : 'bg-yellow-50 border-2 border-yellow-200'
-          }`}>
-            <div className="flex items-start gap-4">
-              {result.recommendation === 'FLEXIBLE' ? (
-                <CheckCircle className="w-8 h-8 text-green-600 flex-shrink-0" />
-              ) : result.recommendation === 'FIXED' ? (
-                <CheckCircle className="w-8 h-8 text-blue-600 flex-shrink-0" />
-              ) : (
-                <AlertCircle className="w-8 h-8 text-yellow-600 flex-shrink-0" />
-              )}
-              <div>
-                <h3 className="text-xl font-bold text-gray-900">
-                  Recommendation: {result.recommendation}
-                </h3>
-                <p className="text-gray-700 mt-1">{result.reason}</p>
-                <div className="mt-3 flex items-center gap-2">
-                  <span className="text-sm text-gray-500">Confidence:</span>
-                  <span className="font-semibold">{Math.round(result.confidence * 100)}%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Comparison Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Fixed Contract */}
-            <div className="bg-white rounded-xl shadow-sm border p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                Fixed Contract
-              </h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <div className="text-sm text-gray-500">Fixed Rate</div>
-                  <div className="text-2xl font-bold text-gray-900">
-                    £{result.fixed_rate.toFixed(2)}/MWh
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-sm text-gray-500">Annual Cost</div>
-                  <div className="text-2xl font-bold text-blue-600">
-                    {formatCurrency(result.fixed_annual_cost)}
-                  </div>
-                </div>
-                
-                <div className="pt-4 border-t">
-                  <div className="text-sm text-gray-500">Pros</div>
-                  <ul className="mt-2 space-y-1 text-sm text-gray-700">
-                    <li>✓ Price certainty for budgeting</li>
-                    <li>✓ No market exposure risk</li>
-                    <li>✓ Simple to manage</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Flexible Contract */}
-            <div className="bg-white rounded-xl shadow-sm border p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                Flexible Purchasing
-              </h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <div className="text-sm text-gray-500">Expected Average Rate</div>
-                  <div className="text-2xl font-bold text-gray-900">
-                    £{result.flexible_expected.toFixed(2)}/MWh
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-sm text-gray-500">Expected Annual Cost</div>
-                  <div className="text-2xl font-bold text-green-600">
-                    {formatCurrency(result.flexible_expected_annual)}
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-xs text-gray-500">Best Case</div>
-                    <div className="font-semibold text-green-600">
-                      {formatCurrency(result.flexible_best_case)}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-500">Worst Case</div>
-                    <div className="font-semibold text-red-600">
-                      {formatCurrency(result.flexible_worst_case)}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="pt-4 border-t">
-                  <div className="text-sm text-gray-500">Trade-offs</div>
-                  <ul className="mt-2 space-y-1 text-sm text-gray-700">
-                    <li>✓ Potential savings of {result.savings_potential_pct.toFixed(1)}%</li>
-                    <li>✓ Market timing opportunities</li>
-                    <li>⚠ {result.risk_pct.toFixed(1)}% downside risk</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Summary */}
-          <div className="bg-white rounded-xl shadow-sm border p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Summary</h3>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="text-sm text-gray-500 mb-1">Potential Savings</div>
-                <div className={`text-xl font-bold ${
-                  result.savings_potential_pct > 0 ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {result.savings_potential_pct > 0 ? '+' : ''}
-                  {formatCurrency(result.fixed_annual_cost - result.flexible_expected_annual)}
-                </div>
-              </div>
-              
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="text-sm text-gray-500 mb-1">Savings %</div>
-                <div className={`text-xl font-bold ${
-                  result.savings_potential_pct > 0 ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {result.savings_potential_pct > 0 ? '+' : ''}
-                  {result.savings_potential_pct.toFixed(1)}%
-                </div>
-              </div>
-              
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="text-sm text-gray-500 mb-1">Downside Risk</div>
-                <div className="text-xl font-bold text-gray-900">
-                  {result.risk_pct.toFixed(1)}%
-                </div>
-              </div>
-              
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="text-sm text-gray-500 mb-1">Max Downside</div>
-                <div className="text-xl font-bold text-red-600">
-                  {formatCurrency(result.flexible_worst_case - result.fixed_annual_cost)}
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+    </AppLayout>
   );
 }

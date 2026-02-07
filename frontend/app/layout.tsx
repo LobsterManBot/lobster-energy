@@ -1,9 +1,37 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  title: 'Lobster Energy 🦞⚡',
-  description: 'AI-powered energy procurement advisory',
+  title: 'Lobster Energy | AI-Powered Energy Market Intelligence for Brokers',
+  description: 'Win more clients with AI-powered trading signals. Data-backed recommendations for energy brokers and TPIs. Know when to advise clients to buy.',
+  keywords: 'energy broker, TPI, energy procurement, electricity prices, trading signals, UK energy market',
+  openGraph: {
+    title: 'Lobster Energy | AI-Powered Market Intelligence for Energy Brokers',
+    description: 'Win more clients with AI-powered trading signals. Data-backed recommendations that build trust and close deals.',
+    url: 'https://lobster.energy',
+    siteName: 'Lobster Energy',
+    images: [
+      {
+        url: '/lobster-logo.png',
+        width: 500,
+        height: 500,
+        alt: 'Lobster Energy Logo',
+      },
+    ],
+    locale: 'en_GB',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Lobster Energy | AI-Powered Market Intelligence',
+    description: 'Win more clients with AI-powered trading signals for energy brokers.',
+    images: ['/lobster-logo.png'],
+  },
+  icons: {
+    icon: '/lobster-logo.png',
+    apple: '/lobster-logo.png',
+  },
 };
 
 export default function RootLayout({
@@ -13,37 +41,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-50">
-        <nav className="bg-white shadow-sm border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
-              <div className="flex items-center">
-                <span className="text-2xl mr-2">🦞</span>
-                <span className="text-xl font-bold text-gray-900">
-                  Lobster Energy
-                </span>
-                <span className="ml-2 text-sm text-gray-500">⚡</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <a href="/" className="text-gray-700 hover:text-lobster-600 px-3 py-2 rounded-md text-sm font-medium">
-                  Dashboard
-                </a>
-                <a href="/forecast" className="text-gray-700 hover:text-lobster-600 px-3 py-2 rounded-md text-sm font-medium">
-                  Forecast
-                </a>
-                <a href="/signals" className="text-gray-700 hover:text-lobster-600 px-3 py-2 rounded-md text-sm font-medium">
-                  Signals
-                </a>
-                <a href="/compare" className="text-gray-700 hover:text-lobster-600 px-3 py-2 rounded-md text-sm font-medium">
-                  Compare Contracts
-                </a>
-              </div>
-            </div>
-          </div>
-        </nav>
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="icon" href="/lobster-logo.png" />
+      </head>
+      <body>
+        <Providers>
           {children}
-        </main>
+        </Providers>
       </body>
     </html>
   );
