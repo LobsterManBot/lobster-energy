@@ -15,9 +15,15 @@ const navItems = [
   { href: '/compare', label: 'Compare', icon: '⚖️' },
 ]
 
+const agencyItems = [
+  { href: '/reports', label: 'Reports', icon: '📄' },
+  { href: '/settings', label: 'Settings', icon: '⚙️' },
+]
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [user, setUser] = useState<any>(null)
+  const [showMenu, setShowMenu] = useState(false)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user))
@@ -49,15 +55,64 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   {item.label}
                 </Link>
               ))}
+              
+              {/* Agency Menu */}
+              <div className="relative ml-2">
+                <button
+                  onClick={() => setShowMenu(!showMenu)}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 ${
+                    pathname === '/reports' || pathname === '/settings'
+                      ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                  }`}
+                >
+                  Agency
+                  <svg className={`w-4 h-4 transition-transform ${showMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {showMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-1 z-50">
+                    {agencyItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setShowMenu(false)}
+                        className={`flex items-center gap-2 px-4 py-2 text-sm ${
+                          pathname === item.href
+                            ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
+                            : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                        }`}
+                      >
+                        <span>{item.icon}</span>
+                        {item.label}
+                      </Link>
+                    ))}
+                    <div className="border-t border-slate-700 my-1"></div>
+                    <Link
+                      href="/pricing"
+                      onClick={() => setShowMenu(false)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50"
+                    >
+                      <span>💳</span>
+                      Upgrade Plan
+                    </Link>
+                  </div>
+                )}
+              </div>
             </nav>
 
             {user ? (
-              <Link
-                href="/dashboard"
-                className="text-sm text-slate-300 hover:text-white"
-              >
-                Account
-              </Link>
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-slate-400 hidden md:block">{user.email}</span>
+                <button
+                  onClick={() => supabase.auth.signOut().then(() => window.location.href = '/')}
+                  className="text-sm text-slate-300 hover:text-white"
+                >
+                  Sign out
+                </button>
+              </div>
             ) : (
               <Link
                 href="/login"
@@ -78,7 +133,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-t border-slate-700 z-50">
         <div className="grid grid-cols-5 gap-1 p-2">
-          {navItems.slice(0, 5).map((item) => (
+          {navItems.slice(0, 4).map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -92,8 +147,28 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <span className="text-[10px] mt-1">{item.label}</span>
             </Link>
           ))}
+          {/* More menu on mobile */}
+          <Link
+            href="/reports"
+            className={`flex flex-col items-center py-2 px-1 rounded-lg ${
+              pathname === '/reports' || pathname === '/settings'
+                ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span className="text-lg">📄</span>
+            <span className="text-[10px] mt-1">Reports</span>
+          </Link>
         </div>
       </nav>
+
+      {/* Click outside to close menu */}
+      {showMenu && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setShowMenu(false)}
+        />
+      )}
     </div>
   )
 }

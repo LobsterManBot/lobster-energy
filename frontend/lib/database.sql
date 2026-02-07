@@ -51,3 +51,33 @@ alter table public.api_usage enable row level security;
 
 create policy "Users can view own usage" on public.api_usage
   for select using (auth.uid() = user_id);
+
+-- Branding settings for white-label reports (Agency tier)
+create table public.branding_settings (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users on delete cascade unique,
+  company_name text,
+  logo_url text,
+  primary_color text default '#fb8a99',
+  contact_email text,
+  contact_phone text,
+  website text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.branding_settings enable row level security;
+
+create policy "Users can view own branding" on public.branding_settings
+  for select using (auth.uid() = user_id);
+
+create policy "Users can insert own branding" on public.branding_settings
+  for insert with check (auth.uid() = user_id);
+
+create policy "Users can update own branding" on public.branding_settings
+  for update using (auth.uid() = user_id);
+
+-- Create storage bucket for logos
+-- Run this in Supabase Dashboard > Storage > New Bucket
+-- Name: logos
+-- Public: true

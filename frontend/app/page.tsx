@@ -225,66 +225,101 @@ export default function TPILandingPage() {
       {/* Pricing */}
       <section className="container mx-auto px-4 py-16" id="pricing">
         <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-4">
-          Simple Pricing
+          Choose Your Plan
         </h2>
         <p className="text-slate-400 text-center mb-12">
-          One plan. Everything included. Cancel anytime.
+          14-day free trial on all plans. No credit card required.
         </p>
         
-        <div className="max-w-md mx-auto">
-          <div className="bg-gradient-to-b from-[#fb8a99]/10 to-slate-800/50 rounded-2xl p-8 border-2 border-[#fb8a99]/50 card-hover relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#fb8a99]/10 rounded-full blur-3xl"></div>
-            <div className="relative">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
-                <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-5xl font-bold gradient-text">£149</span>
-                  <span className="text-slate-400">/month</span>
-                </div>
-                <p className="text-green-400 text-sm mt-2">14-day free trial included</p>
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {/* Pro Tier */}
+          <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-8 card-hover">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
+              <p className="text-slate-400 text-sm mb-4">For individual brokers</p>
+              <div className="flex items-baseline justify-center gap-1">
+                <span className="text-5xl font-bold text-white">£149</span>
+                <span className="text-slate-400">/month</span>
               </div>
-              
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-3 text-slate-300">
-                  <span className="text-green-400">✓</span> Real-time trading signals
-                </li>
-                <li className="flex items-center gap-3 text-slate-300">
-                  <span className="text-green-400">✓</span> Price forecasts (7-90 days)
-                </li>
-                <li className="flex items-center gap-3 text-slate-300">
-                  <span className="text-green-400">✓</span> Backtest analysis
-                </li>
-                <li className="flex items-center gap-3 text-slate-300">
-                  <span className="text-green-400">✓</span> Weather impact data
-                </li>
-                <li className="flex items-center gap-3 text-slate-300">
-                  <span className="text-green-400">✓</span> Demand forecasting
-                </li>
-                <li className="flex items-center gap-3 text-slate-300">
-                  <span className="text-green-400">✓</span> Contract comparison tools
-                </li>
-                <li className="flex items-center gap-3 text-slate-300">
-                  <span className="text-green-400">✓</span> Email support
-                </li>
-              </ul>
-
-              <Link
-                href="/signup"
-                className="block w-full py-4 text-center bg-[#fb8a99] hover:bg-[#e87a89] text-white font-semibold rounded-lg text-lg btn-shine transition-all hover:scale-105"
-              >
-                Start Free Trial
-              </Link>
-              <p className="text-center text-slate-500 text-sm mt-4">
-                No credit card required
-              </p>
             </div>
+            
+            <ul className="space-y-3 mb-8">
+              <li className="flex items-center gap-3 text-slate-300">
+                <span className="text-green-400">✓</span> Real-time trading signals
+              </li>
+              <li className="flex items-center gap-3 text-slate-300">
+                <span className="text-green-400">✓</span> Price forecasts (7-90 days)
+              </li>
+              <li className="flex items-center gap-3 text-slate-300">
+                <span className="text-green-400">✓</span> Backtest analysis
+              </li>
+              <li className="flex items-center gap-3 text-slate-300">
+                <span className="text-green-400">✓</span> Weather & demand data
+              </li>
+              <li className="flex items-center gap-3 text-slate-300">
+                <span className="text-green-400">✓</span> Contract comparison
+              </li>
+              <li className="flex items-center gap-3 text-slate-300">
+                <span className="text-green-400">✓</span> Email support
+              </li>
+            </ul>
+
+            <Link
+              href="/signup"
+              className="block w-full py-4 text-center bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg text-lg transition-all hover:scale-105"
+            >
+              Start Free Trial
+            </Link>
+          </div>
+
+          {/* Agency Tier */}
+          <div className="bg-gradient-to-b from-[#fb8a99]/10 to-slate-800/50 rounded-2xl p-8 border-2 border-[#fb8a99]/50 card-hover relative overflow-hidden">
+            <div className="absolute top-4 right-4 bg-[#fb8a99] text-white text-xs font-bold px-3 py-1 rounded-full">
+              POPULAR
+            </div>
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">Agency</h3>
+              <p className="text-slate-400 text-sm mb-4">For brokerages & teams</p>
+              <div className="flex items-baseline justify-center gap-1">
+                <span className="text-5xl font-bold gradient-text">£299</span>
+                <span className="text-slate-400">/month</span>
+              </div>
+            </div>
+            
+            <ul className="space-y-3 mb-8">
+              <li className="flex items-center gap-3 text-slate-300">
+                <span className="text-green-400">✓</span> Everything in Pro
+              </li>
+              <li className="flex items-center gap-3 text-white font-medium">
+                <span className="text-[#fb8a99]">★</span> White-label PDF reports
+              </li>
+              <li className="flex items-center gap-3 text-white font-medium">
+                <span className="text-[#fb8a99]">★</span> Your logo & branding
+              </li>
+              <li className="flex items-center gap-3 text-white font-medium">
+                <span className="text-[#fb8a99]">★</span> Client report sharing
+              </li>
+              <li className="flex items-center gap-3 text-white font-medium">
+                <span className="text-[#fb8a99]">★</span> Scheduled weekly reports
+              </li>
+              <li className="flex items-center gap-3 text-slate-300">
+                <span className="text-green-400">✓</span> Priority support
+              </li>
+            </ul>
+
+            <Link
+              href="/signup"
+              className="block w-full py-4 text-center bg-[#fb8a99] hover:bg-[#e87a89] text-white font-semibold rounded-lg text-lg btn-shine transition-all hover:scale-105"
+            >
+              Start Free Trial
+            </Link>
           </div>
         </div>
 
         <div className="text-center mt-8">
-          <p className="text-slate-400">
-            Need white-label or API access? <a href="mailto:hello@lobster.energy" className="text-[#fb8a99] hover:text-[#fca5b0]">Contact us</a>
-          </p>
+          <Link href="/pricing" className="text-[#fb8a99] hover:text-[#fca5b0]">
+            View full pricing details & annual discounts →
+          </Link>
         </div>
       </section>
 
