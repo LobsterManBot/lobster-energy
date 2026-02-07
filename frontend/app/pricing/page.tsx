@@ -148,10 +148,10 @@ export default function PricingPage() {
               ) : (
                 <>
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-5xl font-bold gradient-text">£2,500</span>
+                    <span className="text-5xl font-bold gradient-text">£2,599</span>
                     <span className="text-slate-400">/year</span>
                   </div>
-                  <p className="text-green-400 text-sm mt-2">= £208/month (Save £1,088)</p>
+                  <p className="text-green-400 text-sm mt-2">= £217/month (Save £989)</p>
                 </>
               )}
             </div>
