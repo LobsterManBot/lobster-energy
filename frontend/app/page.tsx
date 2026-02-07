@@ -22,7 +22,7 @@ export default function TPILandingPage() {
         </div>
         <div className="flex gap-4">
           <Link href="/login" className="text-slate-300 hover:text-white px-4 py-2">Login</Link>
-          <Link href="/signup" className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium">
+          <Link href="/signup" className="bg-[#fb8a99] hover:bg-[#e87a89] text-white px-4 py-2 rounded-lg font-medium">
             Start Free Trial
           </Link>
         </div>
@@ -30,12 +30,12 @@ export default function TPILandingPage() {
 
       {/* Hero */}
       <section className="container mx-auto px-4 py-16 md:py-24 text-center">
-        <div className="inline-block px-4 py-1 bg-red-500/20 text-red-400 rounded-full text-sm font-medium mb-6">
+        <div className="inline-block px-4 py-1 bg-[#fb8a99]/20 text-[#fb8a99] rounded-full text-sm font-medium mb-6">
           Built for Energy Brokers & TPIs
         </div>
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
           Win More Clients With<br />
-          <span className="text-red-500">AI-Powered Market Intelligence</span>
+          <span className="text-[#fb8a99]">AI-Powered Market Intelligence</span>
         </h1>
         <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
           Stop guessing when to advise clients to buy. Get data-backed signals that 
@@ -45,7 +45,7 @@ export default function TPILandingPage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link 
             href="/signup" 
-            className="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-lg font-semibold text-lg"
+            className="bg-[#fb8a99] hover:bg-[#e87a89] text-white px-8 py-4 rounded-lg font-semibold text-lg"
           >
             Start 14-Day Free Trial
           </Link>
@@ -68,17 +68,17 @@ export default function TPILandingPage() {
           Every energy broker faces these challenges
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6">
             <div className="text-3xl mb-3">😰</div>
             <h3 className="text-lg font-semibold text-white mb-2">"Should we buy now?"</h3>
             <p className="text-slate-400 text-sm">Clients ask for timing advice but you're guessing based on gut feel and yesterday's news.</p>
           </div>
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6">
             <div className="text-3xl mb-3">🏃</div>
             <h3 className="text-lg font-semibold text-white mb-2">Competing on price alone</h3>
             <p className="text-slate-400 text-sm">Every broker has the same suppliers. Hard to differentiate when you're all quoting the same rates.</p>
           </div>
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+          <div className="bg-[#fb8a99]/10 border border-[#fb8a99]/30 rounded-xl p-6">
             <div className="text-3xl mb-3">👋</div>
             <h3 className="text-lg font-semibold text-white mb-2">Clients shop around</h3>
             <p className="text-slate-400 text-sm">You place a contract, then don't hear from them for 2 years until renewal. No ongoing relationship.</p>
@@ -164,21 +164,21 @@ export default function TPILandingPage() {
 
       {/* Social Proof / Results */}
       <section className="container mx-auto px-4 py-16">
-        <div className="bg-gradient-to-r from-red-500/20 to-red-500/20 border border-red-500/30 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-center">
+        <div className="bg-gradient-to-r from-[#fb8a99]/20 to-[#fb8a99]/20 border border-[#fb8a99]/30 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
             The Numbers Don't Lie
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-red-400 mb-2">4%</div>
+              <div className="text-4xl md:text-5xl font-bold text-[#fb8a99] mb-2">4%</div>
               <div className="text-slate-300">Average savings vs. buying blind</div>
             </div>
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-red-400 mb-2">£33k</div>
+              <div className="text-4xl md:text-5xl font-bold text-[#fb8a99] mb-2">£33k</div>
               <div className="text-slate-300">Annual savings per 1MW client</div>
             </div>
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-red-400 mb-2">24/7</div>
+              <div className="text-4xl md:text-5xl font-bold text-[#fb8a99] mb-2">24/7</div>
               <div className="text-slate-300">Real-time BMRS market data</div>
             </div>
           </div>
@@ -231,7 +231,7 @@ export default function TPILandingPage() {
         </p>
         
         <div className="max-w-md mx-auto">
-          <div className="bg-gradient-to-b from-red-500/10 to-slate-800/50 rounded-2xl p-8 border-2 border-red-500/50">
+          <div className="bg-gradient-to-b from-[#fb8a99]/10 to-slate-800/50 rounded-2xl p-8 border-2 border-[#fb8a99]/50">
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
               <div className="flex items-baseline justify-center gap-1">
@@ -267,7 +267,7 @@ export default function TPILandingPage() {
 
             <Link
               href="/signup"
-              className="block w-full py-4 text-center bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg text-lg transition-colors"
+              className="block w-full py-4 text-center bg-[#fb8a99] hover:bg-[#e87a89] text-white font-semibold rounded-lg text-lg transition-colors"
             >
               Start Free Trial
             </Link>
@@ -279,7 +279,7 @@ export default function TPILandingPage() {
 
         <div className="text-center mt-8">
           <p className="text-slate-400">
-            Need white-label or API access? <a href="mailto:hello@lobster.energy" className="text-red-400 hover:text-red-300">Contact us</a>
+            Need white-label or API access? <a href="mailto:hello@lobster.energy" className="text-[#fb8a99] hover:text-[#fca5b0]">Contact us</a>
           </p>
         </div>
       </section>
@@ -332,7 +332,7 @@ export default function TPILandingPage() {
         </p>
         <Link 
           href="/signup" 
-          className="inline-block bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-lg font-semibold text-lg"
+          className="inline-block bg-[#fb8a99] hover:bg-[#e87a89] text-white px-8 py-4 rounded-lg font-semibold text-lg"
         >
           Start Your Free Trial
         </Link>

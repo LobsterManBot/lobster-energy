@@ -22,7 +22,7 @@ export default function WeatherPage() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#fb8a99]"></div>
         </div>
       </AppLayout>
     );
@@ -31,7 +31,7 @@ export default function WeatherPage() {
   if (!data?.success) {
     return (
       <AppLayout>
-        <div className="text-red-400 p-4 bg-red-500/20 rounded-xl">Failed to load weather</div>
+        <div className="text-[#fb8a99] p-4 bg-[#fb8a99]/20 rounded-xl">Failed to load weather</div>
       </AppLayout>
     );
   }
@@ -65,7 +65,7 @@ export default function WeatherPage() {
 
         {/* Price Impact */}
         <div className={`rounded-xl border-2 p-4 ${
-          pressureColor === 'red' ? 'bg-red-500/20 border-red-500/50' :
+          pressureColor === 'red' ? 'bg-[#fb8a99]/20 border-[#fb8a99]/50' :
           pressureColor === 'green' ? 'bg-green-500/20 border-green-500/50' :
           'bg-slate-700/50 border-slate-600'
         }`}>
@@ -75,7 +75,7 @@ export default function WeatherPage() {
                data.analysis.pricePressure === 'downward' ? '↘️' : '➡️'}
             </span>
             <span className={`text-lg font-bold ${
-              pressureColor === 'red' ? 'text-red-400' :
+              pressureColor === 'red' ? 'text-[#fb8a99]' :
               pressureColor === 'green' ? 'text-green-400' : 'text-slate-300'
             }`}>
               {data.analysis.pricePressure === 'upward' ? 'Upward Pressure' :
@@ -90,7 +90,7 @@ export default function WeatherPage() {
           <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-3 text-center">
             <div className="text-lg mb-1">🔥</div>
             <div className={`text-sm font-bold ${
-              data.analysis.demandImpact === 'high' ? 'text-red-400' :
+              data.analysis.demandImpact === 'high' ? 'text-[#fb8a99]' :
               data.analysis.demandImpact === 'medium' ? 'text-yellow-400' : 'text-green-400'
             }`}>{data.analysis.demandImpact.toUpperCase()}</div>
             <div className="text-xs text-slate-500">Heating</div>
@@ -99,7 +99,7 @@ export default function WeatherPage() {
             <div className="text-lg mb-1">💨</div>
             <div className={`text-sm font-bold ${
               data.analysis.windGeneration === 'high' ? 'text-green-400' :
-              data.analysis.windGeneration === 'medium' ? 'text-yellow-400' : 'text-red-400'
+              data.analysis.windGeneration === 'medium' ? 'text-yellow-400' : 'text-[#fb8a99]'
             }`}>{data.analysis.windGeneration.toUpperCase()}</div>
             <div className="text-xs text-slate-500">Wind</div>
           </div>
@@ -107,7 +107,7 @@ export default function WeatherPage() {
             <div className="text-lg mb-1">☀️</div>
             <div className={`text-sm font-bold ${
               data.analysis.solarGeneration === 'high' ? 'text-green-400' :
-              data.analysis.solarGeneration === 'medium' ? 'text-yellow-400' : 'text-red-400'
+              data.analysis.solarGeneration === 'medium' ? 'text-yellow-400' : 'text-[#fb8a99]'
             }`}>{data.analysis.solarGeneration.toUpperCase()}</div>
             <div className="text-xs text-slate-500">Solar</div>
           </div>
@@ -127,12 +127,12 @@ export default function WeatherPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="text-red-400 text-sm">{day.maxTemp}°</span>
+                  <span className="text-[#fb8a99] text-sm">{day.maxTemp}°</span>
                   <span className="text-slate-600">/</span>
                   <span className="text-blue-400 text-sm">{day.minTemp}°</span>
                 </div>
                 <div className={`text-sm font-medium w-16 text-right ${
-                  day.hdd > 10 ? 'text-red-400' : day.hdd > 5 ? 'text-yellow-400' : 'text-green-400'
+                  day.hdd > 10 ? 'text-[#fb8a99]' : day.hdd > 5 ? 'text-yellow-400' : 'text-green-400'
                 }`}>
                   {day.hdd} HDD
                 </div>

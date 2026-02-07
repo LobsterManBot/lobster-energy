@@ -57,7 +57,7 @@ export default function PricingPage() {
               onClick={() => setBilling('monthly')}
               className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
                 billing === 'monthly' 
-                  ? 'bg-red-500 text-white' 
+                  ? 'bg-[#fb8a99] text-white' 
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -67,7 +67,7 @@ export default function PricingPage() {
               onClick={() => setBilling('annual')}
               className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
                 billing === 'annual' 
-                  ? 'bg-red-500 text-white' 
+                  ? 'bg-[#fb8a99] text-white' 
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -77,7 +77,7 @@ export default function PricingPage() {
         </div>
 
         <div className="max-w-md mx-auto">
-          <div className="bg-gradient-to-b from-red-500/10 to-slate-800/50 rounded-2xl p-8 border-2 border-red-500/50">
+          <div className="bg-gradient-to-b from-[#fb8a99]/10 to-slate-800/50 rounded-2xl p-8 border-2 border-[#fb8a99]/50">
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
               {billing === 'monthly' ? (
@@ -126,7 +126,7 @@ export default function PricingPage() {
             <button
               onClick={() => handleSubscribe(billing)}
               disabled={loading !== null}
-              className="block w-full py-4 text-center bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg text-lg transition-colors disabled:opacity-50"
+              className="block w-full py-4 text-center bg-[#fb8a99] hover:bg-[#e87a89] text-white font-semibold rounded-lg text-lg transition-colors disabled:opacity-50"
             >
               {loading ? 'Loading...' : 'Start Free Trial'}
             </button>
@@ -150,14 +150,14 @@ export default function PricingPage() {
         <div className="text-center mt-8">
           <p className="text-slate-400">
             Need white-label or API access?{' '}
-            <a href="mailto:hello@lobster.energy" className="text-red-400 hover:text-red-300">
+            <a href="mailto:hello@lobster.energy" className="text-[#fb8a99] hover:text-[#fca5b0]">
               Contact us for Agency pricing
             </a>
           </p>
         </div>
         
         <div className="text-center mt-8">
-          <Link href="/dashboard" className="text-red-400 hover:text-red-300">
+          <Link href="/dashboard" className="text-[#fb8a99] hover:text-[#fca5b0]">
             ← Back to Dashboard
           </Link>
         </div>

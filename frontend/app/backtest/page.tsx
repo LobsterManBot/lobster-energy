@@ -25,7 +25,7 @@ export default function BacktestPage() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#fb8a99]"></div>
         </div>
       </AppLayout>
     );
@@ -34,7 +34,7 @@ export default function BacktestPage() {
   if (!data?.success) {
     return (
       <AppLayout>
-        <div className="text-red-400 p-4 bg-red-500/20 rounded-xl">Failed to load backtest</div>
+        <div className="text-[#fb8a99] p-4 bg-[#fb8a99]/20 rounded-xl">Failed to load backtest</div>
       </AppLayout>
     );
   }
@@ -54,10 +54,10 @@ export default function BacktestPage() {
 
         {/* THE BIG NUMBER */}
         <div className={`rounded-xl border-2 p-6 text-center ${
-          outperformed ? 'bg-green-500/20 border-green-500' : 'bg-red-500/20 border-red-500'
+          outperformed ? 'bg-green-500/20 border-green-500' : 'bg-[#fb8a99]/20 border-[#fb8a99]'
         }`}>
           <div className="text-sm text-slate-300 mb-1">Following our signals, you would have saved</div>
-          <div className={`text-5xl font-bold mb-2 ${outperformed ? 'text-green-400' : 'text-red-400'}`}>
+          <div className={`text-5xl font-bold mb-2 ${outperformed ? 'text-green-400' : 'text-[#fb8a99]'}`}>
             £{annualSavings.toLocaleString()}
           </div>
           <div className="text-lg text-slate-300">per year</div>
@@ -79,7 +79,7 @@ export default function BacktestPage() {
             step="0.5"
             value={consumption}
             onChange={(e) => setConsumption(parseFloat(e.target.value))}
-            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-red-500"
+            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#fb8a99]"
           />
           <div className="flex justify-between text-xs text-slate-500 mt-1">
             <span>0.5 MW</span>

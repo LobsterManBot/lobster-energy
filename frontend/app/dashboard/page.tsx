@@ -63,7 +63,7 @@ export default function DashboardPage() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#fb8a99]"></div>
         </div>
       </AppLayout>
     )
@@ -90,7 +90,7 @@ export default function DashboardPage() {
             </h1>
             <p className="text-slate-400">
               {profile?.company && `${profile.company} · `}
-              <span className={isPro ? 'text-red-400' : 'text-slate-500'}>
+              <span className={isPro ? 'text-[#fb8a99]' : 'text-slate-500'}>
                 {isPro ? '⭐ Pro' : 'Free'} Plan
               </span>
             </p>
@@ -134,7 +134,7 @@ export default function DashboardPage() {
               <div className="text-xs text-slate-400 uppercase">Price Percentile</div>
               <div className={`text-3xl font-bold ${
                 signal.priceContext.percentile < 30 ? 'text-green-400' :
-                signal.priceContext.percentile > 70 ? 'text-red-400' : 'text-yellow-400'
+                signal.priceContext.percentile > 70 ? 'text-[#fb8a99]' : 'text-yellow-400'
               }`}>
                 {signal.priceContext.percentile}th
               </div>
@@ -143,7 +143,7 @@ export default function DashboardPage() {
                   <div 
                     className={`h-2 rounded-full ${
                       signal.priceContext.percentile < 30 ? 'bg-green-500' :
-                      signal.priceContext.percentile > 70 ? 'bg-red-500' : 'bg-yellow-500'
+                      signal.priceContext.percentile > 70 ? 'bg-[#fb8a99]' : 'bg-yellow-500'
                     }`}
                     style={{ width: `${signal.priceContext.percentile}%` }}
                   />
@@ -159,7 +159,7 @@ export default function DashboardPage() {
 
         {/* Upgrade Banner (for free users) */}
         {!isPro && (
-          <div className="p-4 bg-gradient-to-r from-red-500/20 to-red-500/20 border border-red-500/30 rounded-xl">
+          <div className="p-4 bg-gradient-to-r from-[#fb8a99]/20 to-[#fb8a99]/20 border border-[#fb8a99]/30 rounded-xl">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <h3 className="text-lg font-semibold text-white">Upgrade to Pro</h3>
@@ -167,7 +167,7 @@ export default function DashboardPage() {
               </div>
               <Link
                 href="/pricing"
-                className="px-6 py-2 bg-gradient-to-r from-red-500 to-red-500 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-600 transition-all text-center"
+                className="px-6 py-2 bg-gradient-to-r from-[#fb8a99] to-[#fb8a99] text-white font-semibold rounded-lg hover:from-[#e87a89] hover:to-[#e87a89] transition-all text-center"
               >
                 View Plans
               </Link>
@@ -247,13 +247,13 @@ function FeatureCard({
   const content = (
     <div className={`p-5 rounded-xl border transition-all ${
       available 
-        ? 'bg-slate-800/50 border-slate-700 hover:border-red-500/50 hover:bg-slate-800 cursor-pointer' 
+        ? 'bg-slate-800/50 border-slate-700 hover:border-[#fb8a99]/50 hover:bg-slate-800 cursor-pointer' 
         : 'bg-slate-800/30 border-slate-700/50 opacity-60'
     }`}>
       <div className="flex items-start justify-between">
         <span className="text-2xl">{icon}</span>
         {proOnly && (
-          <span className="px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded-full">
+          <span className="px-2 py-0.5 bg-[#fb8a99]/20 text-[#fb8a99] text-xs rounded-full">
             PRO
           </span>
         )}

@@ -40,7 +40,7 @@ export default function DemandPage() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#fb8a99]"></div>
         </div>
       </AppLayout>
     );
@@ -49,7 +49,7 @@ export default function DemandPage() {
   if (!data?.success) {
     return (
       <AppLayout>
-        <div className="text-red-400 p-4 bg-red-500/20 rounded-xl">Failed to load demand data</div>
+        <div className="text-[#fb8a99] p-4 bg-[#fb8a99]/20 rounded-xl">Failed to load demand data</div>
       </AppLayout>
     );
   }
@@ -75,7 +75,7 @@ export default function DemandPage() {
             step="0.5"
             value={baseload}
             onChange={(e) => setBaseload(parseFloat(e.target.value))}
-            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-red-500"
+            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#fb8a99]"
           />
           <div className="flex justify-between text-xs text-slate-500 mt-1">
             <span>Small site</span>
@@ -136,7 +136,7 @@ export default function DemandPage() {
                       <div className="text-sm font-medium text-white">{day.dayOfWeek}</div>
                       <div className="text-xs text-slate-500">{day.date}</div>
                     </td>
-                    <td className="px-4 py-3 text-right text-sm font-medium text-red-400">
+                    <td className="px-4 py-3 text-right text-sm font-medium text-[#fb8a99]">
                       {day.peakDemand} MW
                     </td>
                     <td className="px-4 py-3 text-right text-sm text-green-400">
@@ -154,10 +154,10 @@ export default function DemandPage() {
 
         {/* Pricing Periods */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-red-500/20 rounded-xl border border-red-500/30 p-4">
-            <h3 className="font-semibold text-red-400 mb-1">Peak Period</h3>
+          <div className="bg-[#fb8a99]/20 rounded-xl border border-[#fb8a99]/30 p-4">
+            <h3 className="font-semibold text-[#fb8a99] mb-1">Peak Period</h3>
             <div className="text-xl font-bold text-white">16:00 - 20:00</div>
-            <p className="text-xs text-red-300 mt-1">Highest prices, avoid if possible</p>
+            <p className="text-xs text-[#fca5b0] mt-1">Highest prices, avoid if possible</p>
           </div>
           <div className="bg-yellow-500/20 rounded-xl border border-yellow-500/30 p-4">
             <h3 className="font-semibold text-yellow-400 mb-1">Day Rate</h3>

@@ -21,7 +21,7 @@ export default function ComparePage() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#fb8a99]"></div>
         </div>
       </AppLayout>
     );
@@ -30,7 +30,7 @@ export default function ComparePage() {
   if (!data) {
     return (
       <AppLayout>
-        <div className="text-red-400 p-4 bg-red-500/20 rounded-xl">Unable to load data</div>
+        <div className="text-[#fb8a99] p-4 bg-[#fb8a99]/20 rounded-xl">Unable to load data</div>
       </AppLayout>
     );
   }
@@ -64,7 +64,7 @@ export default function ComparePage() {
                 type="number"
                 value={annualMWh}
                 onChange={(e) => setAnnualMWh(parseInt(e.target.value) || 0)}
-                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-[#fb8a99] focus:border-[#fb8a99]"
                 placeholder="Annual MWh"
               />
             </div>
@@ -112,7 +112,7 @@ export default function ComparePage() {
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2 text-green-400"><span>✓</span> Benefit from drops</div>
               <div className="flex items-center gap-2 text-green-400"><span>✓</span> Lower avg cost</div>
-              <div className="flex items-center gap-2 text-red-400"><span>✗</span> Spike exposure</div>
+              <div className="flex items-center gap-2 text-[#fb8a99]"><span>✗</span> Spike exposure</div>
             </div>
           </div>
         </div>

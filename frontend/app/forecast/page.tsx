@@ -52,7 +52,7 @@ export default function ForecastPage() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#fb8a99]"></div>
         </div>
       </AppLayout>
     );
@@ -75,7 +75,7 @@ export default function ForecastPage() {
                 onClick={() => setHorizon(d)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   horizon === d
-                    ? 'bg-red-500 text-white'
+                    ? 'bg-[#fb8a99] text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                 }`}
               >
@@ -105,7 +105,7 @@ export default function ForecastPage() {
             <div className="bg-slate-800/50 rounded-xl border border-slate-700 p-4">
               <div className="text-slate-400 text-sm mb-1">Expected</div>
               <div className={`text-2xl font-bold flex items-center gap-2 ${
-                data.summary.percentChange > 0 ? 'text-red-400' : 'text-green-400'
+                data.summary.percentChange > 0 ? 'text-[#fb8a99]' : 'text-green-400'
               }`}>
                 {data.summary.direction === 'up' ? '↗' : data.summary.direction === 'down' ? '↘' : '→'}
                 {data.summary.percentChange > 0 ? '+' : ''}{data.summary.percentChange}%

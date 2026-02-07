@@ -42,7 +42,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   href={item.href}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     pathname === item.href
-                      ? 'bg-red-500/20 text-red-400'
+                      ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
                       : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
                   }`}
                 >
@@ -61,7 +61,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             ) : (
               <Link
                 href="/login"
-                className="text-sm text-red-400 hover:text-red-300"
+                className="text-sm text-[#fb8a99] hover:text-[#fca5b0]"
               >
                 Sign in
               </Link>
@@ -84,7 +84,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               href={item.href}
               className={`flex flex-col items-center py-2 px-1 rounded-lg ${
                 pathname === item.href
-                  ? 'bg-red-500/20 text-red-400'
+                  ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
                   : 'text-slate-400 hover:text-white'
               }`}
             >

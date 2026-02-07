@@ -21,7 +21,7 @@ export default function SignalCard({ market, signal, currentPrice, unit }: Signa
       case 'WAIT':
         return <Pause className="w-5 h-5 text-yellow-600" />;
       case 'SELL':
-        return <ArrowUp className="w-5 h-5 text-red-600" />;
+        return <ArrowUp className="w-5 h-5 text-[#e87a89]" />;
       default:
         return null;
     }
@@ -34,7 +34,7 @@ export default function SignalCard({ market, signal, currentPrice, unit }: Signa
       case 'WAIT':
         return 'border-yellow-200 bg-yellow-50';
       case 'SELL':
-        return 'border-red-200 bg-red-50';
+        return 'border-[#fdd8dd] bg-[#fff5f6]';
       default:
         return 'border-gray-200 bg-gray-50';
     }

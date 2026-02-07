@@ -32,7 +32,7 @@ export default function SignalsPage() {
     return (
       <AppLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-red-500"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#fb8a99]"></div>
         </div>
       </AppLayout>
     );
@@ -41,7 +41,7 @@ export default function SignalsPage() {
   if (!data) {
     return (
       <AppLayout>
-        <div className="text-red-400 p-4 bg-red-500/20 rounded-xl">Unable to load signals</div>
+        <div className="text-[#fb8a99] p-4 bg-[#fb8a99]/20 rounded-xl">Unable to load signals</div>
       </AppLayout>
     );
   }
@@ -84,7 +84,7 @@ export default function SignalsPage() {
               <span className="text-slate-400">Percentile</span>
               <span className={`font-bold ${
                 data.priceContext.percentile < 30 ? 'text-green-400' :
-                data.priceContext.percentile > 70 ? 'text-red-400' : 'text-yellow-400'
+                data.priceContext.percentile > 70 ? 'text-[#fb8a99]' : 'text-yellow-400'
               }`}>{data.priceContext.percentile}th</span>
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function SignalsPage() {
               <div 
                 className={`h-4 rounded-full ${
                   data.priceContext.percentile < 30 ? 'bg-green-500' :
-                  data.priceContext.percentile > 70 ? 'bg-red-500' : 'bg-yellow-500'
+                  data.priceContext.percentile > 70 ? 'bg-[#fb8a99]' : 'bg-yellow-500'
                 }`}
                 style={{ width: `${data.priceContext.percentile}%` }}
               />

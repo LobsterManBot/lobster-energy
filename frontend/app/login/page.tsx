@@ -42,7 +42,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="bg-slate-800/50 backdrop-blur rounded-2xl p-8 shadow-xl border border-slate-700">
           {error && (
-            <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+            <div className="mb-4 p-3 bg-[#fb8a99]/20 border border-[#fb8a99]/50 rounded-lg text-[#fca5b0] text-sm">
               {error}
             </div>
           )}
@@ -53,7 +53,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#fb8a99] focus:border-transparent"
               placeholder="you@company.com"
               required
             />
@@ -65,7 +65,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#fb8a99] focus:border-transparent"
               placeholder="••••••••"
               required
             />
@@ -74,14 +74,14 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-red-500 to-red-500 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-600 transition-all disabled:opacity-50"
+            className="w-full py-3 bg-gradient-to-r from-[#fb8a99] to-[#fb8a99] text-white font-semibold rounded-lg hover:from-[#e87a89] hover:to-[#e87a89] transition-all disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
           <p className="mt-6 text-center text-slate-400 text-sm">
             Don't have an account?{' '}
-            <Link href="/signup" className="text-red-400 hover:text-red-300">
+            <Link href="/signup" className="text-[#fb8a99] hover:text-[#fca5b0]">
               Sign up
             </Link>
           </p>
