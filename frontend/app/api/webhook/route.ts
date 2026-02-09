@@ -40,7 +40,11 @@ export async function POST(request: Request) {
           
           // Determine tier from price
           const priceId = subscription.items?.data?.[0]?.price?.id
-          const tier = priceId?.includes('enterprise') ? 'enterprise' : 'pro'
+          const agencyPrices = [
+            process.env.STRIPE_AGENCY_PRICE_ID,
+            process.env.STRIPE_AGENCY_ANNUAL_PRICE_ID,
+          ]
+          const tier = agencyPrices.includes(priceId) ? 'agency' : 'pro'
 
           // Update user profile
           await supabase
