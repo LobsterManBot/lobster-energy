@@ -59,7 +59,7 @@ Use this data to inform your responses.` : ''
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-5-20250220',
+        model: 'claude-3-5-sonnet-20241022',
         max_tokens: 500,
         system: SYSTEM_PROMPT + contextMessage,
         messages: anthropicMessages,
