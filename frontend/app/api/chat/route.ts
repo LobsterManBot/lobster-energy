@@ -26,12 +26,20 @@ export async function POST(request: Request) {
   try {
     if (!ANTHROPIC_API_KEY) {
       return NextResponse.json(
-        { error: 'AI chat not configured. Please add ANTHROPIC_API_KEY.' },
+        { error: 'AI chat not configured. Missing ANTHROPIC_API_KEY.' },
         { status: 500 }
       )
     }
 
-    const { messages, marketContext } = await request.json()
+    const body = await request.json()
+    const { messages, marketContext } = body
+
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return NextResponse.json(
+        { error: 'No messages provided' },
+        { status: 400 }
+      )
+    }
 
     // Build context-aware system message
     const contextMessage = marketContext ? `
@@ -68,6 +76,14 @@ Use this data to inform your responses.` : ''
 
     const data = await response.json()
 
+    if (!response.ok) {
+      console.error('Anthropic API error:', response.status, data)
+      return NextResponse.json(
+        { error: data.error?.message || `Anthropic API error: ${response.status}` },
+        { status: 500 }
+      )
+    }
+
     if (data.error) {
       console.error('Anthropic error:', data.error)
       return NextResponse.json(
@@ -79,10 +95,10 @@ Use this data to inform your responses.` : ''
     const reply = data.content?.[0]?.text || 'Sorry, I couldn\'t generate a response.'
 
     return NextResponse.json({ reply })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Chat error:', error)
     return NextResponse.json(
-      { error: 'Failed to process chat request' },
+      { error: error.message || 'Failed to process chat request' },
       { status: 500 }
     )
   }
