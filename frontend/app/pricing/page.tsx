@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null)
-  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
+  const [billing, setBilling] = useState<'monthly' | 'annual'>('annual')
 
   async function handleSubscribe(tier: 'pro' | 'agency', billingPeriod: 'monthly' | 'annual') {
     setLoading(`${tier}-${billingPeriod}`)
