@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import AppLayout from '@/components/AppLayout'
 import { AreaChart, Area, ResponsiveContainer } from 'recharts'
+import AIChatBox from '@/components/AIChatBox'
 
 interface Profile {
   email: string
@@ -255,6 +256,17 @@ export default function DashboardPage() {
             <div className="text-slate-500 text-xs">Avg. Savings</div>
           </div>
         </div>
+
+        {/* AI Chat */}
+        <AIChatBox 
+          marketContext={signal ? {
+            signal: signal.signal,
+            confidence: signal.confidence,
+            currentPrice: signal.priceContext.current,
+            avg30d: signal.priceContext.avg30d,
+            percentile: signal.priceContext.percentile,
+          } : undefined}
+        />
 
         {/* Upgrade Banner */}
         {!isPro && (
