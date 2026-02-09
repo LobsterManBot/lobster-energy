@@ -65,10 +65,24 @@ export default function SettingsPage() {
     const file = e.target.files?.[0]
     if (!file || !user) return
 
+    // Validate file type
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      setMessage({ type: 'error', text: 'Invalid format. Please upload PNG, JPG, SVG, or WebP.' })
+      return
+    }
+
+    // Validate file size (max 2MB)
+    const maxSize = 2 * 1024 * 1024 // 2MB in bytes
+    if (file.size > maxSize) {
+      setMessage({ type: 'error', text: 'File too large. Maximum size is 2MB.' })
+      return
+    }
+
     setUploading(true)
     
     // Upload to Supabase Storage
-    const fileExt = file.name.split('.').pop()
+    const fileExt = file.name.split('.').pop()?.toLowerCase()
     const fileName = `${user.id}/logo.${fileExt}`
     
     const { data, error } = await supabase.storage
@@ -76,7 +90,7 @@ export default function SettingsPage() {
       .upload(fileName, file, { upsert: true })
 
     if (error) {
-      setMessage({ type: 'error', text: 'Failed to upload logo' })
+      setMessage({ type: 'error', text: `Upload failed: ${error.message}` })
       setUploading(false)
       return
     }
@@ -157,13 +171,13 @@ export default function SettingsPage() {
                   </span>
                   <input
                     type="file"
-                    accept="image/*"
+                    accept=".png,.jpg,.jpeg,.svg,.webp,image/png,image/jpeg,image/svg+xml,image/webp"
                     onChange={handleLogoUpload}
                     className="hidden"
                     disabled={uploading}
                   />
                 </label>
-                <p className="text-slate-500 text-sm mt-2">PNG or JPG, max 2MB</p>
+                <p className="text-slate-500 text-sm mt-2">PNG, JPG, SVG, or WebP · Max 2MB</p>
               </div>
             </div>
           </div>
