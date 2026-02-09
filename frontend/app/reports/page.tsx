@@ -27,12 +27,15 @@ interface BrandingSettings {
 
 export default function ReportsPage() {
   const [user, setUser] = useState<any>(null)
+  const [subscriptionTier, setSubscriptionTier] = useState<string>('free')
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [marketData, setMarketData] = useState<MarketData | null>(null)
   const [branding, setBranding] = useState<BrandingSettings | null>(null)
   const [clientName, setClientName] = useState('')
   const reportRef = useRef<HTMLDivElement>(null)
+  
+  const isAgency = subscriptionTier === 'agency'
 
   useEffect(() => {
     loadData()
@@ -45,6 +48,17 @@ export default function ReportsPage() {
       return
     }
     setUser(user)
+
+    // Load user profile for subscription tier
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_tier')
+      .eq('id', user.id)
+      .single()
+    
+    if (profile?.subscription_tier) {
+      setSubscriptionTier(profile.subscription_tier)
+    }
 
     // Load branding settings
     const { data: brandingData } = await supabase
@@ -150,6 +164,26 @@ export default function ReportsPage() {
       <AppLayout>
         <div className="flex items-center justify-center h-64">
           <div className="text-slate-400">Loading...</div>
+        </div>
+      </AppLayout>
+    )
+  }
+
+  if (!isAgency) {
+    return (
+      <AppLayout>
+        <div className="max-w-2xl mx-auto text-center py-12">
+          <div className="text-5xl mb-4">🔒</div>
+          <h1 className="text-2xl font-bold text-white mb-4">Agency Feature</h1>
+          <p className="text-slate-400 mb-6">
+            White-label PDF reports are available on the Agency plan. Generate professional, branded market reports for your clients.
+          </p>
+          <Link
+            href="/pricing"
+            className="inline-block bg-[#fb8a99] hover:bg-[#e87a89] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+          >
+            Upgrade to Agency
+          </Link>
         </div>
       </AppLayout>
     )
