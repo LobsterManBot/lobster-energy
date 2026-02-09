@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 
 const SYSTEM_PROMPT = `You are Lenny, the AI energy advisor for Lobster Energy. You help UK energy brokers and businesses understand wholesale electricity markets and make better procurement decisions.
 
@@ -24,9 +24,9 @@ Keep responses concise (2-3 paragraphs max unless asked for detail). Use emoji s
 
 export async function POST(request: Request) {
   try {
-    if (!OPENAI_API_KEY) {
+    if (!ANTHROPIC_API_KEY) {
       return NextResponse.json(
-        { error: 'AI chat not configured. Please add OPENAI_API_KEY.' },
+        { error: 'AI chat not configured. Please add ANTHROPIC_API_KEY.' },
         { status: 500 }
       )
     }
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
 
     // Build context-aware system message
     const contextMessage = marketContext ? `
+
 Current Market Data:
 - Signal: ${marketContext.signal} (${Math.round(marketContext.confidence * 100)}% confidence)
 - Current Price: £${marketContext.currentPrice}/MWh
@@ -44,35 +45,38 @@ Current Market Data:
 
 Use this data to inform your responses.` : ''
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Convert messages to Anthropic format
+    const anthropicMessages = messages.slice(-10).map((m: { role: string; content: string }) => ({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: m.content
+    }))
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT + contextMessage },
-          ...messages.slice(-10) // Keep last 10 messages for context
-        ],
-        temperature: 0.7,
+        model: 'claude-3-5-haiku-20241022',
         max_tokens: 500,
-        stream: false,
+        system: SYSTEM_PROMPT + contextMessage,
+        messages: anthropicMessages,
       }),
     })
 
     const data = await response.json()
 
     if (data.error) {
-      console.error('OpenAI error:', data.error)
+      console.error('Anthropic error:', data.error)
       return NextResponse.json(
         { error: data.error.message || 'AI request failed' },
         { status: 500 }
       )
     }
 
-    const reply = data.choices?.[0]?.message?.content || 'Sorry, I couldn\'t generate a response.'
+    const reply = data.content?.[0]?.text || 'Sorry, I couldn\'t generate a response.'
 
     return NextResponse.json({ reply })
   } catch (error) {
