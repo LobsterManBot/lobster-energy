@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import confetti from 'canvas-confetti'
 
 type Step = 'welcome' | 'role' | 'goals' | 'plan'
 
@@ -35,48 +34,6 @@ const GOALS = [
   { id: 'save', label: 'Save clients money', icon: '💰' },
   { id: 'reports', label: 'Professional reports', icon: '📄' },
 ]
-
-// Lobster confetti function
-function fireLobsterConfetti() {
-  const duration = 3000
-  const end = Date.now() + duration
-
-  // Custom lobster shape using emoji
-  const lobsterEmoji = confetti.shapeFromText({ text: '🦞', scalar: 2 })
-  
-  const frame = () => {
-    confetti({
-      particleCount: 3,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0 },
-      shapes: [lobsterEmoji],
-      scalar: 2,
-    })
-    confetti({
-      particleCount: 3,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1 },
-      shapes: [lobsterEmoji],
-      scalar: 2,
-    })
-
-    if (Date.now() < end) {
-      requestAnimationFrame(frame)
-    }
-  }
-  
-  frame()
-  
-  // Also fire some regular confetti for extra celebration
-  confetti({
-    particleCount: 100,
-    spread: 70,
-    origin: { y: 0.6 },
-    colors: ['#fb8a99', '#f472b6', '#c084fc', '#ffffff'],
-  })
-}
 
 export default function OnboardingPage() {
   const [step, setStep] = useState<Step>('welcome')
@@ -124,13 +81,6 @@ export default function OnboardingPage() {
 
     checkUser()
   }, [router])
-
-  // Fire confetti when reaching plan step
-  useEffect(() => {
-    if (step === 'plan') {
-      fireLobsterConfetti()
-    }
-  }, [step])
 
   async function saveOnboarding() {
     if (!user) return
@@ -335,12 +285,12 @@ export default function OnboardingPage() {
         {step === 'plan' && (
           <div className="animate-fade-in">
             <div className="text-center mb-6">
-              <div className="text-5xl mb-4">🎉</div>
+              <div className="text-5xl mb-4">🎯</div>
               <h2 className="text-2xl font-bold text-white mb-2">
-                You're all set!
+                Choose your plan
               </h2>
               <p className="text-slate-400">
-                Choose a plan to get started. All plans include a 14-day free trial.
+                All plans include a 14-day free trial. No credit card required.
               </p>
             </div>
 
@@ -449,7 +399,7 @@ export default function OnboardingPage() {
             </div>
 
             <p className="text-center text-slate-500 text-sm mt-6">
-              No credit card required for trial • Cancel anytime
+              Cancel anytime during your trial
             </p>
           </div>
         )}

@@ -67,7 +67,7 @@ export async function GET(request: Request) {
       metadata: {
         supabase_user_id: user.id,
       },
-      success_url: `https://lobster.energy/dashboard?welcome=true`,
+      success_url: `https://lobster.energy/welcome`,
       cancel_url: `https://lobster.energy/onboarding`,
       allow_promotion_codes: true,
     })

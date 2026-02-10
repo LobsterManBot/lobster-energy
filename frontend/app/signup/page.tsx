@@ -35,30 +35,9 @@ export default function SignupPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      setSuccess(true)
+      // Email verification is disabled - go straight to onboarding
+      router.push('/onboarding')
     }
-  }
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-        <div className="w-full max-w-md text-center">
-          <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-8 shadow-xl border border-slate-700">
-            <div className="text-5xl mb-4">📧</div>
-            <h2 className="text-2xl font-bold text-white mb-2">Check your email</h2>
-            <p className="text-slate-400 mb-6">
-              We've sent a confirmation link to <strong className="text-white">{email}</strong>
-            </p>
-            <Link
-              href="/login"
-              className="text-[#fb8a99] hover:text-[#fca5b0]"
-            >
-              Back to login
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   return (
