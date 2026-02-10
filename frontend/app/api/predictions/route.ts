@@ -71,7 +71,16 @@ export async function GET(request: Request) {
     
     const n = historicalDaily.length;
     
-    // Simple trend + mean reversion forecast
+    // Dampened trend + conservative mean reversion forecast
+    // Calculate historical volatility for adaptive dampening
+    const returns: number[] = [];
+    for (let i = 1; i < historicalDaily.length; i++) {
+      returns.push((historicalDaily[i] - historicalDaily[i-1]) / historicalDaily[i-1]);
+    }
+    const avgReturn = returns.reduce((a, b) => a + b, 0) / returns.length;
+    const volatility = Math.sqrt(returns.reduce((a, r) => a + Math.pow(r - avgReturn, 2), 0) / returns.length);
+    
+    // Simple trend calculation (heavily dampened)
     let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
     historicalDaily.forEach((y, x) => {
       sumX += x;
@@ -79,18 +88,38 @@ export async function GET(request: Request) {
       sumXY += x * y;
       sumX2 += x * x;
     });
-    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-    const intercept = (sumY - slope * sumX) / n;
+    const rawSlope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - rawSlope * sumX) / n;
     const avgPrice = sumY / n;
     
-    // Generate predictions
+    // Dampen the slope significantly - reduce trend influence by 70%
+    const slope = rawSlope * 0.3;
+    
+    // Maximum daily change: 4% (middle of 3-5% range)
+    const MAX_DAILY_CHANGE = 0.04;
+    
+    // Generate predictions with smoothing
     const predictions: number[] = [];
+    let previousPrediction = historicalDaily[n - 1]; // Start from current price
+    
     for (let i = 1; i <= horizon; i++) {
-      // Blend trend with mean reversion
+      // Blend trend with strong mean reversion (slower convergence)
       const trendValue = intercept + slope * (n + i);
-      const meanWeight = Math.min(0.5, i * 0.02); // More mean reversion over time
-      const prediction = trendValue * (1 - meanWeight) + avgPrice * meanWeight;
-      predictions.push(Math.max(0, Math.round(prediction * 100) / 100));
+      // Slower mean reversion: max 30% weight, builds slowly
+      const meanWeight = Math.min(0.3, i * 0.008);
+      const rawPrediction = trendValue * (1 - meanWeight) + avgPrice * meanWeight;
+      
+      // Apply smoothing: exponential moving average with previous prediction
+      const smoothingFactor = 0.7; // Heavy smoothing
+      const smoothedPrediction = smoothingFactor * previousPrediction + (1 - smoothingFactor) * rawPrediction;
+      
+      // Clamp daily change to MAX_DAILY_CHANGE
+      const maxChange = previousPrediction * MAX_DAILY_CHANGE;
+      const change = smoothedPrediction - previousPrediction;
+      const clampedPrediction = previousPrediction + Math.max(-maxChange, Math.min(maxChange, change));
+      
+      predictions.push(Math.max(0, Math.round(clampedPrediction * 100) / 100));
+      previousPrediction = clampedPrediction;
     }
     
     // Build response
@@ -118,7 +147,7 @@ export async function GET(request: Request) {
       product,
       horizon: `${horizon} days`,
       current: Math.round(currentPrice * 100) / 100,
-      model: 'Trend + Mean Reversion',
+      model: 'Smoothed Conservative (max 4%/day)',
       summary: {
         avgPredicted: Math.round(avgPredicted * 100) / 100,
         minPredicted: Math.round(Math.min(...predictions) * 100) / 100,
