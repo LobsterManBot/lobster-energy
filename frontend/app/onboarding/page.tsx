@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import confetti from 'canvas-confetti'
 
 type Step = 'welcome' | 'role' | 'goals' | 'plan'
 
@@ -35,11 +36,54 @@ const GOALS = [
   { id: 'reports', label: 'Professional reports', icon: '📄' },
 ]
 
+// Lobster confetti function
+function fireLobsterConfetti() {
+  const duration = 3000
+  const end = Date.now() + duration
+
+  // Custom lobster shape using emoji
+  const lobsterEmoji = confetti.shapeFromText({ text: '🦞', scalar: 2 })
+  
+  const frame = () => {
+    confetti({
+      particleCount: 3,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      shapes: [lobsterEmoji],
+      scalar: 2,
+    })
+    confetti({
+      particleCount: 3,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      shapes: [lobsterEmoji],
+      scalar: 2,
+    })
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame)
+    }
+  }
+  
+  frame()
+  
+  // Also fire some regular confetti for extra celebration
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 },
+    colors: ['#fb8a99', '#f472b6', '#c084fc', '#ffffff'],
+  })
+}
+
 export default function OnboardingPage() {
   const [step, setStep] = useState<Step>('welcome')
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [billing, setBilling] = useState<'annual' | 'monthly'>('annual')
   const [data, setData] = useState<OnboardingData>({
     role: '',
     clientCount: '',
@@ -81,6 +125,13 @@ export default function OnboardingPage() {
     checkUser()
   }, [router])
 
+  // Fire confetti when reaching plan step
+  useEffect(() => {
+    if (step === 'plan') {
+      fireLobsterConfetti()
+    }
+  }, [step])
+
   async function saveOnboarding() {
     if (!user) return
 
@@ -114,6 +165,11 @@ export default function OnboardingPage() {
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#fb8a99]"></div>
       </div>
     )
+  }
+
+  const prices = {
+    pro: { monthly: 149, annual: 100, annualTotal: 1200 },
+    agency: { monthly: 299, annual: 208, annualTotal: 2500 },
   }
 
   return (
@@ -278,7 +334,7 @@ export default function OnboardingPage() {
         {/* Plan Selection Step */}
         {step === 'plan' && (
           <div className="animate-fade-in">
-            <div className="text-center mb-8">
+            <div className="text-center mb-6">
               <div className="text-5xl mb-4">🎉</div>
               <h2 className="text-2xl font-bold text-white mb-2">
                 You're all set!
@@ -286,6 +342,35 @@ export default function OnboardingPage() {
               <p className="text-slate-400">
                 Choose a plan to get started. All plans include a 14-day free trial.
               </p>
+            </div>
+
+            {/* Billing Toggle */}
+            <div className="flex justify-center mb-6">
+              <div className="bg-slate-800 rounded-full p-1 flex">
+                <button
+                  onClick={() => setBilling('monthly')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    billing === 'monthly'
+                      ? 'bg-slate-700 text-white'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Monthly
+                </button>
+                <button
+                  onClick={() => setBilling('annual')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
+                    billing === 'annual'
+                      ? 'bg-[#fb8a99] text-white'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Annual
+                  <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                    Save 30%
+                  </span>
+                </button>
+              </div>
             </div>
 
             <div className="space-y-4">
@@ -297,8 +382,18 @@ export default function OnboardingPage() {
                     <p className="text-slate-400 text-sm">For individual brokers</p>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-white">£149</div>
-                    <div className="text-slate-500 text-sm">/month</div>
+                    {billing === 'annual' ? (
+                      <>
+                        <div className="text-2xl font-bold text-white">£{prices.pro.annual}</div>
+                        <div className="text-slate-500 text-sm">/month (billed yearly)</div>
+                        <div className="text-green-400 text-xs">Save £588/year</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="text-2xl font-bold text-white">£{prices.pro.monthly}</div>
+                        <div className="text-slate-500 text-sm">/month</div>
+                      </>
+                    )}
                   </div>
                 </div>
                 <ul className="text-slate-300 text-sm space-y-1 mb-4">
@@ -307,7 +402,7 @@ export default function OnboardingPage() {
                   <li>✓ Contract comparison</li>
                 </ul>
                 <Link
-                  href="/api/checkout?plan=pro"
+                  href={`/api/checkout?plan=pro&billing=${billing}`}
                   className="block w-full py-3 text-center bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
                 >
                   Start Free Trial
@@ -325,8 +420,18 @@ export default function OnboardingPage() {
                     <p className="text-slate-400 text-sm">For brokerages & teams</p>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-[#fb8a99]">£299</div>
-                    <div className="text-slate-500 text-sm">/month</div>
+                    {billing === 'annual' ? (
+                      <>
+                        <div className="text-2xl font-bold text-[#fb8a99]">£{prices.agency.annual}</div>
+                        <div className="text-slate-500 text-sm">/month (billed yearly)</div>
+                        <div className="text-green-400 text-xs">Save £1,088/year</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="text-2xl font-bold text-[#fb8a99]">£{prices.agency.monthly}</div>
+                        <div className="text-slate-500 text-sm">/month</div>
+                      </>
+                    )}
                   </div>
                 </div>
                 <ul className="text-slate-300 text-sm space-y-1 mb-4">
@@ -335,7 +440,7 @@ export default function OnboardingPage() {
                   <li className="text-white font-medium">★ Your branding & logo</li>
                 </ul>
                 <Link
-                  href="/api/checkout?plan=agency"
+                  href={`/api/checkout?plan=agency&billing=${billing}`}
                   className="block w-full py-3 text-center bg-[#fb8a99] hover:bg-[#e87a89] text-white font-semibold rounded-lg transition-colors"
                 >
                   Start Free Trial
