@@ -1,6 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Providers } from './providers';
+import { PostHogProvider } from '@/components/PostHogProvider';
+import { PostHogPageView } from '@/components/PostHogPageView';
 
 export const metadata: Metadata = {
   title: 'Lobster Energy | AI-Powered Energy Market Intelligence for Brokers',
@@ -46,9 +48,12 @@ export default function RootLayout({
         <link rel="icon" href="/lobster-logo.png" />
       </head>
       <body>
-        <Providers>
-          {children}
-        </Providers>
+        <PostHogProvider>
+          <PostHogPageView />
+          <Providers>
+            {children}
+          </Providers>
+        </PostHogProvider>
       </body>
     </html>
   );

@@ -15,14 +15,14 @@ export default function TPILandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Nav */}
-      <nav className="container mx-auto px-4 py-6 flex justify-between items-center animate-fade-in">
+      <nav className="container mx-auto px-4 py-4 sm:py-6 flex justify-between items-center animate-fade-in">
         <div className="flex items-center gap-2">
-          <img src="/lobster-logo.png" alt="Lobster Energy" className="h-12 animate-float" />
-          <span className="text-xl font-bold text-white">Lobster Energy</span>
+          <img src="/lobster-logo.png" alt="Lobster Energy" className="h-10 sm:h-12 animate-float" />
+          <span className="text-lg sm:text-xl font-bold text-white hidden xs:inline">Lobster Energy</span>
         </div>
-        <div className="flex gap-4">
-          <Link href="/login" className="text-slate-300 hover:text-white px-4 py-2 transition-colors">Login</Link>
-          <Link href="/signup" className="bg-[#fb8a99] hover:bg-[#e87a89] text-white px-4 py-2 rounded-lg font-medium btn-shine transition-all hover:scale-105">
+        <div className="flex gap-2 sm:gap-4">
+          <Link href="/login" className="text-slate-300 hover:text-white px-3 sm:px-4 py-2 transition-colors text-sm sm:text-base">Login</Link>
+          <Link href="/signup" className="bg-[#fb8a99] hover:bg-[#e87a89] text-white px-3 sm:px-4 py-2 rounded-lg font-medium btn-shine transition-all hover:scale-105 text-sm sm:text-base whitespace-nowrap">
             Start Free Trial
           </Link>
         </div>

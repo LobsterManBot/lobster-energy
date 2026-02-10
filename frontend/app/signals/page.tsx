@@ -93,14 +93,14 @@ export default function SignalsPage() {
     <AppLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h1 className="text-2xl font-bold text-white">Trading Signals</h1>
             <p className="text-slate-400 text-sm">
               Updated {new Date(data.lastUpdated).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
-          <div className="text-right">
+          <div className="sm:text-right">
             <div className="text-slate-400 text-xs uppercase">Live Price</div>
             <div className="text-2xl font-bold text-white">£{data.priceContext.current}<span className="text-sm text-slate-400">/MWh</span></div>
           </div>

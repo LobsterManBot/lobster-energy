@@ -32,9 +32,13 @@ export default function AIChatBox({ marketContext }: AIChatBoxProps) {
   const [loading, setLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // Use scrollTop for more reliable mobile behavior
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight
+    }
   }
 
   useEffect(() => {
@@ -115,7 +119,11 @@ export default function AIChatBox({ marketContext }: AIChatBoxProps) {
       {isOpen && (
         <>
           {/* Messages */}
-          <div className="h-64 overflow-y-auto p-4 space-y-4">
+          <div 
+            ref={messagesContainerRef}
+            className="h-64 sm:h-72 overflow-y-auto p-4 space-y-4 scroll-smooth"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
             {messages.length === 0 ? (
               <div className="text-center py-6">
                 <p className="text-slate-400 text-sm mb-4">

@@ -47,13 +47,25 @@ export default function DashboardPage() {
         return
       }
 
-      const [profileRes, signalRes, marketRes] = await Promise.all([
-        supabase.from('profiles').select('*').eq('id', user.id).single(),
+      // First check profile for subscription access
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+
+      // Gate: Must have a subscription to access dashboard
+      if (!profileData?.subscription_tier || profileData.subscription_tier === 'free') {
+        router.push('/onboarding')
+        return
+      }
+
+      const [signalRes, marketRes] = await Promise.all([
         fetch('/api/signals').then(r => r.json()).catch(() => null),
         fetch('/api/market').then(r => r.json()).catch(() => ({ prices: [] }))
       ])
 
-      setProfile(profileRes.data)
+      setProfile(profileData)
       setSignal(signalRes)
       setPriceHistory(
         marketRes.prices?.slice(-14).map((p: any) => ({
