@@ -352,7 +352,7 @@ export default function OnboardingPage() {
                   <li>✓ Contract comparison</li>
                 </ul>
                 <Link
-                  href={`/api/checkout?plan=pro&billing=${billing}`}
+                  href={`/api/checkout?plan=pro&billing=${billing}&email=${encodeURIComponent(user?.email || '')}&uid=${user?.id || ''}`}
                   className="block w-full py-3 text-center bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
                 >
                   Start Free Trial
@@ -390,7 +390,7 @@ export default function OnboardingPage() {
                   <li className="text-white font-medium">★ Your branding & logo</li>
                 </ul>
                 <Link
-                  href={`/api/checkout?plan=agency&billing=${billing}`}
+                  href={`/api/checkout?plan=agency&billing=${billing}&email=${encodeURIComponent(user?.email || '')}&uid=${user?.id || ''}`}
                   className="block w-full py-3 text-center bg-[#fb8a99] hover:bg-[#e87a89] text-white font-semibold rounded-lg transition-colors"
                 >
                   Start Free Trial

@@ -20,7 +20,7 @@ export default function SignupPage() {
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -34,10 +34,26 @@ export default function SignupPage() {
     if (error) {
       setError(error.message)
       setLoading(false)
-    } else {
-      // Email verification is disabled - go straight to onboarding
-      router.push('/onboarding')
+      return
     }
+
+    // If email verification is disabled, user is auto signed in
+    // But if not, we need to sign them in manually
+    if (!data.session) {
+      // Sign in the user after signup
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+      if (signInError) {
+        setError(signInError.message)
+        setLoading(false)
+        return
+      }
+    }
+
+    // Go to onboarding
+    router.push('/onboarding')
   }
 
   return (
