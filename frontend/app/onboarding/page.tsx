@@ -64,18 +64,19 @@ export default function OnboardingPage() {
         .eq('id', user.id)
         .single()
 
-      if (profile?.onboarding_completed && profile?.subscription_tier) {
-        router.push('/dashboard')
-        return
-      }
-
-      // If they have a subscription but haven't completed onboarding, skip to dashboard
+      // Only redirect to dashboard if they have an ACTIVE subscription (not free)
       if (profile?.subscription_tier && profile.subscription_tier !== 'free') {
         router.push('/dashboard')
         return
       }
 
       setUser(user)
+      
+      // If onboarding completed but no subscription, skip to plan selection
+      if (profile?.onboarding_completed) {
+        setStep('plan')
+      }
+      
       setLoading(false)
     }
 
