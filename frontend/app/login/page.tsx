@@ -26,6 +26,7 @@ export default function LoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
+      router.refresh() // Refresh server state with new cookies
       router.push('/dashboard')
     }
   }
