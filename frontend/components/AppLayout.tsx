@@ -13,11 +13,11 @@ const navItems = [
   { href: '/weather', label: 'Weather', icon: '🌤️' },
   { href: '/demand', label: 'Demand', icon: '⚡' },
   { href: '/compare', label: 'Compare', icon: '⚖️' },
+  { href: '/settings', label: 'Settings', icon: '⚙️' },
 ]
 
 const agencyItems = [
   { href: '/reports', label: 'Reports', icon: '📄' },
-  { href: '/settings', label: 'Settings', icon: '⚙️' },
 ]
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -61,7 +61,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <button
                   onClick={() => setShowMenu(!showMenu)}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 ${
-                    pathname === '/reports' || pathname === '/settings'
+                    pathname === '/reports'
                       ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
                       : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
                   }`}
@@ -151,13 +151,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link
             href="/reports"
             className={`flex flex-col items-center py-2 px-1 rounded-lg ${
-              pathname === '/reports' || pathname === '/settings'
+              pathname === '/reports'
                 ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
             <span className="text-lg">📄</span>
             <span className="text-[10px] mt-1">Reports</span>
+          </Link>
+          <Link
+            href="/settings"
+            className={`flex flex-col items-center py-2 px-1 rounded-lg ${
+              pathname === '/settings'
+                ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span className="text-lg">⚙️</span>
+            <span className="text-[10px] mt-1">Settings</span>
           </Link>
         </div>
       </nav>

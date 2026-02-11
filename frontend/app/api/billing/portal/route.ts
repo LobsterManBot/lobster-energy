@@ -41,6 +41,7 @@ export async function POST(request: Request) {
     // Create Stripe Customer Portal session
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: profile.stripe_customer_id,
+      configuration: 'bpc_1SzOJeBJnZ29CWvnPMQ62Vsk',
       return_url: 'https://lobster.energy/settings',
     })
 
