@@ -62,11 +62,13 @@ export async function POST(request: Request) {
               subscription_status: sub.status,
               stripe_customer_id: session.customer as string,
               stripe_subscription_id: subscriptionId,
-              current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+              current_period_end: sub.current_period_end 
+                ? new Date(sub.current_period_end * 1000).toISOString() 
+                : null,
               trial_end: sub.trial_end 
                 ? new Date(sub.trial_end * 1000).toISOString() 
                 : null,
-              cancel_at_period_end: sub.cancel_at_period_end,
+              cancel_at_period_end: sub.cancel_at_period_end || false,
               updated_at: new Date().toISOString(),
             })
             .eq('id', userId)
@@ -97,11 +99,13 @@ export async function POST(request: Request) {
             .update({
               subscription_tier: tier,
               subscription_status: subscription.status,
-              current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+              current_period_end: subscription.current_period_end 
+                ? new Date(subscription.current_period_end * 1000).toISOString() 
+                : null,
               trial_end: subscription.trial_end 
                 ? new Date(subscription.trial_end * 1000).toISOString() 
                 : null,
-              cancel_at_period_end: subscription.cancel_at_period_end,
+              cancel_at_period_end: subscription.cancel_at_period_end || false,
               updated_at: new Date().toISOString(),
             })
             .eq('id', profile.id)
