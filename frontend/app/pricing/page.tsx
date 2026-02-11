@@ -24,15 +24,22 @@ export default function PricingPage() {
       body: JSON.stringify({ tier, billing: billingPeriod, userId: user.id }),
     })
 
-    const { url, error } = await response.json()
+    const data = await response.json()
     
-    if (error) {
-      alert(error)
+    if (data.error) {
+      alert(data.error)
       setLoading(null)
       return
     }
 
-    window.location.href = url
+    // Handle upgrade success (no redirect needed)
+    if (data.success) {
+      window.location.href = data.url || '/settings?upgraded=true'
+      return
+    }
+
+    // New subscription - redirect to Stripe
+    window.location.href = data.url
   }
 
   return (
