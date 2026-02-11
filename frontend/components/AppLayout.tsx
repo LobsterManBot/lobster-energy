@@ -13,11 +13,10 @@ const navItems = [
   { href: '/weather', label: 'Weather', icon: '🌤️' },
   { href: '/demand', label: 'Demand', icon: '⚡' },
   { href: '/compare', label: 'Compare', icon: '⚖️' },
-  { href: '/settings', label: 'Settings', icon: '⚙️' },
 ]
 
-const agencyItems = [
-  { href: '/reports', label: 'Reports', icon: '📄' },
+const reportsItems = [
+  { href: '/reports', label: 'Generate Report', icon: '📄' },
 ]
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -56,8 +55,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </Link>
               ))}
               
-              {/* Agency Menu */}
-              <div className="relative ml-2">
+              {/* Reports Menu */}
+              <div className="relative">
                 <button
                   onClick={() => setShowMenu(!showMenu)}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 ${
@@ -66,7 +65,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                       : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
                   }`}
                 >
-                  Agency
+                  Reports
                   <svg className={`w-4 h-4 transition-transform ${showMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -74,7 +73,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 
                 {showMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-1 z-50">
-                    {agencyItems.map((item) => (
+                    {reportsItems.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
@@ -89,18 +88,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         {item.label}
                       </Link>
                     ))}
-                    <div className="border-t border-slate-700 my-1"></div>
-                    <Link
-                      href="/pricing"
-                      onClick={() => setShowMenu(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50"
-                    >
-                      <span>💳</span>
-                      Upgrade Plan
-                    </Link>
                   </div>
                 )}
               </div>
+              
+              {/* Settings */}
+              <Link
+                href="/settings"
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  pathname === '/settings'
+                    ? 'bg-[#fb8a99]/20 text-[#fb8a99]'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                }`}
+              >
+                Settings
+              </Link>
             </nav>
 
             {user ? (
